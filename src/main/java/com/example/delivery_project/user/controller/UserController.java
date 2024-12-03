@@ -5,6 +5,7 @@ import com.example.delivery_project.user.dto.CreateUserResponseDto;
 import com.example.delivery_project.user.dto.LoginRequestDto;
 import com.example.delivery_project.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,19 @@ public class UserController {
         @RequestBody LoginRequestDto requestDto
     ) {
         userService.login(request, requestDto.getUserEmail(), requestDto.getPassword());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+        HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
