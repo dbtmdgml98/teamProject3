@@ -5,6 +5,8 @@ import com.example.delivery_project.common.util.UtilValidation;
 import com.example.delivery_project.user.dto.CreateUserResponseDto;
 import com.example.delivery_project.user.entity.User;
 import com.example.delivery_project.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,5 +46,21 @@ public class UserService {
             savedUser.getEmail(),
             savedUser.getCreatedAt()
         );
+    }
+
+    public void login(HttpServletRequest request, String email, String password) {
+        HttpSession session = request.getSession(true);
+
+        User findUser = userRepository.findByEmail(email);
+
+        if (findUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저 이메일 입니다");
+        }
+
+        if (!passwordEncoder.matches(password, findUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다");
+        }
+
+        session.setAttribute("userId", findUser.getId());
     }
 }
