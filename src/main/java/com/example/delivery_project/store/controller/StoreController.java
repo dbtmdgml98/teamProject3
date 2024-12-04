@@ -79,9 +79,13 @@ public class StoreController {
 
     // 가게 폐업
     @PatchMapping("/owners/stores/status/{storeId}")
-    public ResponseEntity<UpdateStoreStatusResponseDto> updateStoreStatus(@PathVariable(name = "storeId") Long storeId) {
+    public ResponseEntity<UpdateStoreStatusResponseDto> updateStoreStatus(@PathVariable(name = "storeId") Long storeId, HttpServletRequest request) {
 
-        UpdateStoreStatusResponseDto updateStoreStatus = storeService.updateStoreStatus(storeId);
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+        Authority authority = (Authority) session.getAttribute("userAuthority");
+
+        UpdateStoreStatusResponseDto updateStoreStatus = storeService.updateStoreStatus(storeId, userId, authority);
 
         return new ResponseEntity<>(updateStoreStatus, HttpStatus.OK);
     }
