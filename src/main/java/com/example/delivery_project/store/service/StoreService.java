@@ -30,6 +30,16 @@ public class StoreService {
         return new StoreResponseDto(savedStore);
     }
 
+    public StoreResponseDto updateStore(Long id, StoreRequestDto storeRequestDto) {
+
+        Store findStore = storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
+
+        findStore.updateStore(storeRequestDto);
+        Store savedStore = storeRepository.save(findStore);
+
+        return new StoreResponseDto(savedStore);
+    }
+
     public UpdateStoreStatusResponseDto updateStoreStatus(Long id) {
 
         Store findStore = storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));

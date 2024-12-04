@@ -1,6 +1,7 @@
 package com.example.delivery_project.store.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
+import com.example.delivery_project.store.dto.StoreRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -50,5 +51,12 @@ public class Store extends TimeBaseEntity {
 
     public void closeStore() {
         this.storeStatus = StoreStatus.CLOSE;
+    }
+
+    public void updateStore(StoreRequestDto storeRequestDto) {
+        this.name = storeRequestDto.getName();
+        this.openTime = storeRequestDto.getOpenTime();
+        this.closeTime = storeRequestDto.getCloseTime();
+        this.minimumOrderPrice = storeRequestDto.getMinimumOrderPrice();
     }
 }

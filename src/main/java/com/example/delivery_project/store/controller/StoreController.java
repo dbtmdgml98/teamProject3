@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/stores")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class StoreController {
 
     private final StoreService storeService;
 
     // 가게 생성
-    @PostMapping
+    @PostMapping("/owners/stores")
     public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto) {
 
         StoreResponseDto createdStore = storeService.createStore(storeRequestDto);
@@ -30,8 +30,18 @@ public class StoreController {
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }
 
+    // 가게 수정
+    @PatchMapping("/owners/stores/{storeId}")
+    public ResponseEntity<StoreResponseDto> updateStore(@PathVariable(name = "storeId") Long storeId, @RequestBody StoreRequestDto storeRequestDto) {
+
+        StoreResponseDto updatedStore = storeService.updateStore(storeId, storeRequestDto);
+
+        return new ResponseEntity<>(updatedStore, HttpStatus.OK);
+    }
+
+
     // 가게 폐업
-    @PatchMapping("/{storeId}")
+    @PatchMapping("/owners/stores/status/{storeId}")
     public ResponseEntity<UpdateStoreStatusResponseDto> updateStoreStatus(@PathVariable(name = "storeId") Long storeId) {
 
         UpdateStoreStatusResponseDto updateStoreStatus = storeService.updateStoreStatus(storeId);
