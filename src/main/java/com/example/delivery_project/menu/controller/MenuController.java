@@ -72,11 +72,22 @@ public class MenuController {
         Long userId = (Long) session.getAttribute("userId");
 //        User findUser = userService.findById(userId);
 
-        CreateMenuResponseDto savedMenu = menuService.updateMenu(storeId,userId,requestDto);
+        CreateMenuResponseDto updateMenu = menuService.updateMenu(storeId,userId,requestDto);
 
 
-        return new ResponseEntity<>(savedMenu, HttpStatus.CREATED);
+        return new ResponseEntity<>(updateMenu, HttpStatus.CREATED);
 
+    }
+    @DeleteMapping("/{storeId}/menus")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long storeId,
+            @RequestBody MenuRequestDto requestDto,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Long userId = (Long) session.getAttribute("userId");
+        menuService.deleteMenu(storeId,userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

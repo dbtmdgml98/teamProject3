@@ -73,8 +73,25 @@ public class MenuService {
         Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
 
         findMenu.updateMenu(requestDto.getName(), requestDto.getPrice(), requestDto.getMenuDelete());
-
         return Menu.toDto(findMenu);
+    }
+
+    public void deleteMenu(Long storeId, Long userId) {
+        Store findStore = storeService.findById(storeId);
+        User loginUser = userService.findById(userId);
+
+
+        if(loginUser.getAuthority().equals(0)){
+            throw new IllegalArgumentException("주인이 아닙니다.");
+        }
+
+        if(!findStore.getUser().getId().equals(loginUser.getId())){
+            throw new IllegalArgumentException("가게주인이 아닙니다.");
+        }
+
+        Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
+
+        menuRepository.delete(findMenu);
     }
 
 }
