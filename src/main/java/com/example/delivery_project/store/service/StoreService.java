@@ -80,9 +80,15 @@ public class StoreService {
         return StoreResponseDto.toDto(savedStore);
     }
 
-    public UpdateStoreStatusResponseDto updateStoreStatus(Long id) {
+    public UpdateStoreStatusResponseDto updateStoreStatus(Long storeId, Long userId, Authority authority) {
 
-        Store findStore = findById(id);
+        Store findStore = findById(storeId);
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        // 가게 사장이 아닌 경우 (다른 사장이 삭제하는 경우 & 고객이 삭제하는 경우)
+        if (!authority.equals(Authority.OWNER) || !findStore.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게의 사장님 권한을 가진 유저만 가게를 삭제할 수 있습니다.");
+        }
 
         // 가게가 존재하면 폐업 상태로 변환 후 DB 저장
         findStore.closeStore();
