@@ -1,12 +1,16 @@
 package com.example.delivery_project.store.service;
 
+import com.example.delivery_project.store.dto.ReadAllStoreResponseDto;
 import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,6 +43,14 @@ public class StoreService {
 
         Store findStore = findById(id);
         return ReadStoreResponseDto.toDto(findStore);
+    }
+
+    @Transactional
+    public Page<ReadAllStoreResponseDto> findAllStore(Pageable pageable) {
+
+        Page<Store> storesPages = storeRepository.findAll(pageable);
+
+        return storesPages.map(ReadAllStoreResponseDto::toDto);
     }
 
     public StoreResponseDto updateStore(Long id, StoreRequestDto storeRequestDto) {
