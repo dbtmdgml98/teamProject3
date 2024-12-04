@@ -42,4 +42,8 @@ public class User extends TimeBaseEntity {
         this.password = encodePassword;
         this.authority = Authority.valueOf(authority);
     }
+
+    public void deleteUser() {
+        this.userWithdraw = UserWithdraw.WITHDRAWN;
+    }
 }

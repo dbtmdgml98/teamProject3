@@ -1,11 +1,16 @@
 package com.example.delivery_project.store.service;
 
+import com.example.delivery_project.store.dto.ReadAllStoreResponseDto;
+import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,9 +35,27 @@ public class StoreService {
         return new StoreResponseDto(savedStore);
     }
 
+    public Store findById(Long id) {
+        return storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
+    }
+
+    public ReadStoreResponseDto findStoreById(Long id) {
+
+        Store findStore = findById(id);
+        return ReadStoreResponseDto.toDto(findStore);
+    }
+
+    @Transactional
+    public Page<ReadAllStoreResponseDto> findAllStore(Pageable pageable) {
+
+        Page<Store> storesPages = storeRepository.findAll(pageable);
+
+        return storesPages.map(ReadAllStoreResponseDto::toDto);
+    }
+
     public StoreResponseDto updateStore(Long id, StoreRequestDto storeRequestDto) {
 
-        Store findStore = storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
+        Store findStore = findById(id);
 
         findStore.updateStore(storeRequestDto);
         Store savedStore = storeRepository.save(findStore);
@@ -42,7 +65,7 @@ public class StoreService {
 
     public UpdateStoreStatusResponseDto updateStoreStatus(Long id) {
 
-        Store findStore = storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
+        Store findStore = findById(id);
 
         // 가게가 존재하면 폐업 상태로 변환 후 DB 저장
         findStore.closeStore();
