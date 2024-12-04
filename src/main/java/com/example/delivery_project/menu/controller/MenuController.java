@@ -48,13 +48,10 @@ public class MenuController {
             @RequestBody CreateMenuRequestDto requestDto,
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Store findStore = storeService.findById(storeId);
-
 
         Long userId = (Long) session.getAttribute("userId");
-        User findUser = userService.findById(userId);
 
-        CreateMenuResponseDto savedMenu = menuService.save(requestDto,findUser,findStore);
+        CreateMenuResponseDto savedMenu = menuService.save(storeId,userId,requestDto);
 
         return new ResponseEntity<>(savedMenu, HttpStatus.CREATED);
 

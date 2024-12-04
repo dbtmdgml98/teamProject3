@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long> {
+
     Page<Menu> findAllByStoreId(Long id, Pageable pageable);
 
 }

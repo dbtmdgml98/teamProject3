@@ -34,8 +34,9 @@ public class MenuService {
         return ReadMenuResponseDto.toDto(findMenu);
     }
     @Transactional
-    public CreateMenuResponseDto save(CreateMenuRequestDto dto, User loginUser, Store findStore){
-
+    public CreateMenuResponseDto save(Long storeId, Long userId, CreateMenuRequestDto requestDto){
+        Store findStore = storeService.findById(storeId);
+        User loginUser = userService.findById(userId);
 
         if(loginUser.getAuthority().equals(0)){
             throw new IllegalArgumentException("주인이 아닙니다.");
@@ -46,11 +47,11 @@ public class MenuService {
         }
 
 
-        Menu savedMenu = menuRepository.save(dto.toEntity(findStore));
+        Menu savedMenu = menuRepository.save(requestDto.toEntity(findStore));
         return Menu.toDto(savedMenu);
     }
 
-    public Page<ReadMenuResponseDto> getPostsPage(int pageNo,ReadMenuResponseDto findMenu) {
+    public Page<ReadMenuResponseDto> getPostsPage(int pageNo, ReadMenuResponseDto findMenu) {
         Pageable pageable = PageRequest.of(pageNo, 10,Sort.by("createdAt").descending());
 
         return menuRepository.findAllByStoreId(findMenu.getStoreId(), pageable).map(ReadMenuResponseDto::toDto);
