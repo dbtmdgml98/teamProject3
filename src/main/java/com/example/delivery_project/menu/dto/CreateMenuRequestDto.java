@@ -2,6 +2,7 @@ package com.example.delivery_project.menu.dto;
 
 import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.menu.entity.MenuDelete;
+import com.example.delivery_project.store.entity.Store;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

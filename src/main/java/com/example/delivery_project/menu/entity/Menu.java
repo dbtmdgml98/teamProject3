@@ -34,6 +34,7 @@ public class Menu extends TimeBaseEntity {
         this.store = store;
     }
 
+
     public Menu(String name, int price, MenuDelete menuDelete) {
         this.name = name;
         this.price = price;
