@@ -6,6 +6,8 @@ import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.service.StoreService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -31,9 +34,16 @@ public class StoreController {
 
     // 가게 생성
     @PostMapping("/owners/stores")
-    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto) {
+    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto, HttpServletRequest request) {
 
-        StoreResponseDto createdStore = storeService.createStore(storeRequestDto);
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "해당 유저가 존재하지 않습니다.");
+        }
+
+        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, userId);
 
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }

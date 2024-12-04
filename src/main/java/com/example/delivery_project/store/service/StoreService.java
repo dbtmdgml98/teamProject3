@@ -7,6 +7,8 @@ import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.repository.StoreRepository;
+import com.example.delivery_project.user.entity.User;
+import com.example.delivery_project.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,8 +22,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
-    public StoreResponseDto createStore(StoreRequestDto storeRequestDto) {
+    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Long userId) {
 
         // 가게 이름이 이미 존재하는 경우
         Store findName = storeRepository.findByName(storeRequestDto.getName());
@@ -29,10 +32,12 @@ public class StoreService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "가게 이름이 이미 존재합니다.");
         }
 
-        Store store = new Store(storeRequestDto.getName(), storeRequestDto.getOpenTime(), storeRequestDto.getCloseTime(), storeRequestDto.getMinimumOrderPrice());
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        Store store = new Store(storeRequestDto.getName(), storeRequestDto.getOpenTime(), storeRequestDto.getCloseTime(), storeRequestDto.getMinimumOrderPrice(), findUser);
         Store savedStore = storeRepository.save(store);
 
-        return new StoreResponseDto(savedStore);
+        return StoreResponseDto.toDto(savedStore);
     }
 
     public Store findById(Long id) {
@@ -60,7 +65,7 @@ public class StoreService {
         findStore.updateStore(storeRequestDto);
         Store savedStore = storeRepository.save(findStore);
 
-        return new StoreResponseDto(savedStore);
+        return StoreResponseDto.toDto(savedStore);
     }
 
     public UpdateStoreStatusResponseDto updateStoreStatus(Long id) {
