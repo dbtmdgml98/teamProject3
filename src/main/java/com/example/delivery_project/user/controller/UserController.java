@@ -26,12 +26,7 @@ public class UserController {
         @RequestBody CreateUserRequestDto requestDto
     ) {
 
-        CreateUserResponseDto responseDto = userService.createUser(
-            requestDto.getUserName(),
-            requestDto.getUserEmail(),
-            requestDto.getPassword(),
-            requestDto.getAuthority()
-        );
+        CreateUserResponseDto responseDto = userService.createUser(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -41,7 +36,7 @@ public class UserController {
         HttpServletRequest request,
         @RequestBody LoginRequestDto requestDto
     ) {
-        userService.login(request, requestDto.getUserEmail(), requestDto.getPassword());
+        userService.login(request, requestDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
