@@ -2,12 +2,16 @@ package com.example.delivery_project.menu.controller;
 
 import com.example.delivery_project.menu.dto.CreateMenuRequestDto;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
+import com.example.delivery_project.menu.dto.ReadMenuResponseDto;
 import com.example.delivery_project.menu.service.MenuService;
 import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
+import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.service.StoreService;
 import com.example.delivery_project.user.dto.CreateUserRequestDto;
 import com.example.delivery_project.user.dto.LoginRequestDto;
+import com.example.delivery_project.user.entity.User;
+import com.example.delivery_project.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,25 +26,33 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
+    private final StoreService storeService;
+    private final UserService userService;
 
     @GetMapping("/{storeId}/menus")
-    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
+    public ResponseEntity<ReadMenuResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
 
-
-        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId);
+        Store findStore = storeService.findById(storeId);
+        ReadMenuResponseDto foundStore = ReadMenuResponseDto.toDto(menuService.findById(storeId));
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/menus")
+    @PostMapping("/{storeId}/menus")
     public ResponseEntity<CreateMenuResponseDto> save(
-            @PathVariable Long id,
+            @PathVariable Long storeId,
             @RequestBody CreateMenuRequestDto requestDto,
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        CreateUserRequestDto loginUser =(CreateUserRequestDto) session.getAttribute("userAuthority");
+        Store findStore = storeService.findById(storeId);
 
-        CreateMenuResponseDto save = menuService.save(requestDto,loginUser);
+
+        Long userId = (Long) session.getAttribute("userId");
+        User findUser = userService.findById(userId);
+
+
+
+        CreateMenuResponseDto save = menuService.save(requestDto,findUser,findStore);
 
         return new ResponseEntity<>(save, HttpStatus.CREATED);
 
