@@ -50,11 +50,9 @@ public class MenuController {
         Long userId = (Long) session.getAttribute("userId");
         User findUser = userService.findById(userId);
 
+        CreateMenuResponseDto savedMenu = menuService.save(requestDto,findUser,findStore);
 
-
-        CreateMenuResponseDto save = menuService.save(requestDto,findUser,findStore);
-
-        return new ResponseEntity<>(save, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedMenu, HttpStatus.CREATED);
 
     }
 

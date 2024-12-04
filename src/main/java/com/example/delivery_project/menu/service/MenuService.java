@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final StoreService storeService;
 
     public Menu findById(Long userId) {
         return menuRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
@@ -34,11 +33,11 @@ public class MenuService {
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
 
-        if(!findStore.getUser().getId().equals( loginUser.getId())){
+        if(!findStore.getUser().getId().equals(loginUser.getId())){
             throw new IllegalArgumentException("가게주인이 아닙니다.");
         }
 
-        Menu savedMenu = menuRepository.save(dto.toEntity());
+        Menu savedMenu = menuRepository.save(dto.toEntity(findStore));
         return Menu.toDto(savedMenu);
     }
 

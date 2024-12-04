@@ -20,14 +20,13 @@ public class Menu extends TimeBaseEntity {
     private int price;
 
     @Enumerated(value = EnumType.ORDINAL)
-    private MenuDelete menuDelete = MenuDelete.ACTIVE;
+    private MenuDelete menuDelete;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Menu(Long menuId, String name, int price, MenuDelete menuDelete, Store store) {
-        this.menuId = menuId;
+    public Menu(String name, int price, MenuDelete menuDelete, Store store) {
         this.name = name;
         this.price = price;
         this.menuDelete = menuDelete;
@@ -48,9 +47,11 @@ public class Menu extends TimeBaseEntity {
         return new CreateMenuResponseDto(
                 menu.getStore().getId(),
                 menu.getMenuId(),
+                menu.getName(),
                 menu.getPrice(),
-                menu.getName()
+                menu.getMenuDelete()
         );
     }
+
 }
 

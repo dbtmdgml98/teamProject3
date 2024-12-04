@@ -17,16 +17,19 @@ public class CreateMenuRequestDto {
     @NotBlank(message = "메뉴 상태는 필수값 입니다.")
     private MenuDelete menuDelete;
 
+
+
     public CreateMenuRequestDto(String name, int price, MenuDelete menuDelete) {
         this.name = name;
         this.price = price;
         this.menuDelete = menuDelete;
     }
-    public Menu toEntity(){
+    public Menu toEntity(Store findStore){
         return new Menu(
                 this.name,
                 this.price,
-                this.menuDelete
+                this.menuDelete,
+                findStore
         );
     }
 }
