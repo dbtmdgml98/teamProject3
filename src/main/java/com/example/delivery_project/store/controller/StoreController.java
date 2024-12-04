@@ -6,6 +6,7 @@ import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.service.StoreService;
+import com.example.delivery_project.user.entity.Authority;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +39,9 @@ public class StoreController {
 
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute("userId");
+        Authority authority = (Authority) session.getAttribute("userAuthority");
 
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "해당 유저가 존재하지 않습니다.");
-        }
-
-        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, userId);
+        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, authority, userId);
 
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }

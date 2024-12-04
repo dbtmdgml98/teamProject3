@@ -7,6 +7,7 @@ import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.repository.StoreRepository;
+import com.example.delivery_project.user.entity.Authority;
 import com.example.delivery_project.user.entity.User;
 import com.example.delivery_project.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +25,16 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
 
-    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Long userId) {
+    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Authority authority, Long userId) {
+
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "해당 유저가 존재하지 않습니다.");
+        }
+
+        // 사징님이 아닌 경우
+        if (!authority.equals(Authority.OWNER)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사장님 권한을 가진 유저만 가게를 만들 수 있습니다.");
+        }
 
         // 가게 이름이 이미 존재하는 경우
         Store findName = storeRepository.findByName(storeRequestDto.getName());
