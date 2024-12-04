@@ -34,7 +34,7 @@ public class MenuService {
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
 
-        if(findStore.getUser().getId() != loginUser.getId()){
+        if(!findStore.getUser().getId().equals( loginUser.getId())){
             throw new IllegalArgumentException("가게주인이 아닙니다.");
         }
 
