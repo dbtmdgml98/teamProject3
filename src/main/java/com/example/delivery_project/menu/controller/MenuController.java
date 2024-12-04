@@ -3,6 +3,7 @@ package com.example.delivery_project.menu.controller;
 import com.example.delivery_project.menu.dto.CreateMenuRequestDto;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
 import com.example.delivery_project.menu.service.MenuService;
+import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.service.StoreService;
 import com.example.delivery_project.user.dto.CreateUserRequestDto;
@@ -22,15 +23,20 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
+    @GetMapping("/{storeId}/menus")
+    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
 
+
+        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId);
+
+        return new ResponseEntity<>(foundStore, HttpStatus.OK);
+    }
 
     @PostMapping("/{id}/menus")
     public ResponseEntity<CreateMenuResponseDto> save(
             @PathVariable Long id,
             @RequestBody CreateMenuRequestDto requestDto,
             HttpServletRequest request) {
-
-//        StoreResponseDto storeResponseDto = storeService.f
         HttpSession session = request.getSession(false);
         CreateUserRequestDto loginUser =(CreateUserRequestDto) session.getAttribute("userAuthority");
 

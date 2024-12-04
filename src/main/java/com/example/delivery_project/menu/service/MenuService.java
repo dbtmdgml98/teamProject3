@@ -26,7 +26,6 @@ public class MenuService {
     @Transactional
     public CreateMenuResponseDto save(CreateMenuRequestDto dto, CreateUserRequestDto loginUser){
 
-
         if(loginUser.getAuthority().equals(0)){
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
