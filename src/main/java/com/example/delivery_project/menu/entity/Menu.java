@@ -2,8 +2,12 @@ package com.example.delivery_project.menu.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
+import com.example.delivery_project.menu.dto.MenuResponseDto;
+import com.example.delivery_project.menu.dto.UpdateMenuStatusRequestDto;
+import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.entity.Store;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Entity
@@ -51,6 +55,19 @@ public class Menu extends TimeBaseEntity {
                 menu.getPrice(),
                 menu.getMenuDelete()
         );
+    }
+
+
+    public void updateMenu(Menu requestDto) {
+        this.name = requestDto.getName();
+        this.price = requestDto.getPrice();
+        this.menuDelete = requestDto.getMenuDelete();
+    }
+
+    public void updateMenu(String name, int price, MenuDelete menuDelete) {
+        this.name = name;
+        this.price = price;
+        this.menuDelete = menuDelete;
     }
 
 }
