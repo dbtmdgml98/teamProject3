@@ -25,12 +25,12 @@ public class MenuController {
     @GetMapping("/{storeId}/menus")
     public Page<ReadMenuResponseDto> findByAll(
             @PathVariable(name = "storeId") Long storeId,
-            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo) {
+            @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Store findStore = storeService.findById(storeId);
         ReadMenuResponseDto findMenu = menuService.findMenuById(findStore.getId());
 
-        return menuService.getPostsPage(pageNo,findMenu);
+        return menuService.getPostsPage(page,findMenu);
     }
 
 //    @GetMapping("/{storeId}/menus/wow")
@@ -85,7 +85,7 @@ public class MenuController {
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("userId");
-        menuService.deleteMenu(storeId,userId);
+        menuService.deleteMenu(storeId,userId,requestDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

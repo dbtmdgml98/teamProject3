@@ -3,13 +3,14 @@ package com.example.delivery_project.menu.entity;
 import lombok.Getter;
 @Getter
 public enum MenuDelete {
-    ACTIVE(0),
-    DEACTIVATE(1);
+    ACTIVE("SELL"),
+    DEACTIVATE("CLOSE");
 
-    private final int value;
+    private final String value;
 
-    MenuDelete(int value) {
+    MenuDelete(String value) {
         this.value = value;
     }
+
 }
 

@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 
 @Service
@@ -51,9 +51,9 @@ public class MenuService {
     }
 
     public Page<ReadMenuResponseDto> getPostsPage(int pageNo,ReadMenuResponseDto findMenu) {
-        Pageable pageable = PageRequest.of(pageNo, 10);
+        Pageable pageable = PageRequest.of(pageNo, 10,Sort.by("createdAt").descending());
 
-        return menuRepository.findAll(pageable).map(ReadMenuResponseDto::toDto);
+        return menuRepository.findAllByStoreId(findMenu.getStoreId(), pageable).map(ReadMenuResponseDto::toDto);
     }
     @Transactional
     public CreateMenuResponseDto updateMenu(Long storeId, Long userId, UpdateMenuStatusRequestDto requestDto) {
@@ -75,8 +75,8 @@ public class MenuService {
         findMenu.updateMenu(requestDto.getName(), requestDto.getPrice(), requestDto.getMenuDelete());
         return Menu.toDto(findMenu);
     }
-
-    public void deleteMenu(Long storeId, Long userId) {
+    @Transactional
+    public void deleteMenu(Long storeId, Long userId,MenuRequestDto requestDto) {
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
@@ -91,7 +91,10 @@ public class MenuService {
 
         Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
 
-        menuRepository.delete(findMenu);
+        findMenu.setMenu();
+        menuRepository.save(findMenu);
+
+//        menuRepository.delete(findMenu);
     }
 
 }

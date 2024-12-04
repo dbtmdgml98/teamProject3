@@ -2,12 +2,8 @@ package com.example.delivery_project.menu.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
-import com.example.delivery_project.menu.dto.MenuResponseDto;
-import com.example.delivery_project.menu.dto.UpdateMenuStatusRequestDto;
-import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.entity.Store;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Entity
@@ -23,8 +19,8 @@ public class Menu extends TimeBaseEntity {
     @Column(nullable = false)
     private int price;
 
-    @Enumerated(value = EnumType.ORDINAL)
-    private MenuDelete menuDelete;
+    @Enumerated(value =EnumType.STRING)
+    private MenuDelete menuDelete = MenuDelete.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
@@ -70,5 +66,8 @@ public class Menu extends TimeBaseEntity {
         this.menuDelete = menuDelete;
     }
 
+    public void setMenu() {
+        this.menuDelete=MenuDelete.DEACTIVATE;
+    }
 }
 
