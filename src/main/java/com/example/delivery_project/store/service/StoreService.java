@@ -56,9 +56,9 @@ public class StoreService {
         return storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
     }
 
-    public ReadStoreResponseDto findStoreById(Long id) {
+    public ReadStoreResponseDto findStoreByName(String name) {
 
-        Store findStore = findById(id);
+        Store findStore = storeRepository.findByName(name);
         return ReadStoreResponseDto.toDto(findStore);
     }
 

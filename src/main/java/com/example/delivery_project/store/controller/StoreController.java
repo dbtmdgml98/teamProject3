@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,16 +48,16 @@ public class StoreController {
     }
 
     // 가게 단건 조회
-    @GetMapping("/stores/{storeId}")
-    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
+    @GetMapping("/stores")
+    public ResponseEntity<ReadStoreResponseDto> findStoreByName(@RequestParam String name) {
 
-        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId);
+        ReadStoreResponseDto foundStore = storeService.findStoreByName(name);
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
 
     // 가게 다건 조회
-    @GetMapping("/stores")
+    @GetMapping("/stores/all")
     public ResponseEntity<Page<ReadAllStoreResponseDto>> findAllStore(@PageableDefault(page = 1)
                                                                           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                                           Pageable pageable) {
