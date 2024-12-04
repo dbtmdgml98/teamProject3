@@ -4,19 +4,12 @@ import com.example.delivery_project.menu.dto.CreateMenuRequestDto;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
 import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.menu.repository.MenuRepository;
-import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.entity.Store;
-import com.example.delivery_project.store.service.StoreService;
-import com.example.delivery_project.user.dto.CreateUserRequestDto;
-import com.example.delivery_project.user.dto.LoginRequestDto;
 import com.example.delivery_project.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +21,7 @@ public class MenuService {
     }
     @Transactional
     public CreateMenuResponseDto save(CreateMenuRequestDto dto, User loginUser, Store findStore){
+
 
         if(loginUser.getAuthority().equals(0)){
             throw new IllegalArgumentException("주인이 아닙니다.");

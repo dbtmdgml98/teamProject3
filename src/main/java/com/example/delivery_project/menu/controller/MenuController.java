@@ -30,7 +30,7 @@ public class MenuController {
     private final UserService userService;
 
     @GetMapping("/{storeId}/menus")
-    public ResponseEntity<ReadMenuResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
+    public ResponseEntity<ReadMenuResponseDto> findById(@PathVariable(name = "storeId") Long storeId) {
 
         Store findStore = storeService.findById(storeId);
         ReadMenuResponseDto foundStore = ReadMenuResponseDto.toDto(menuService.findById(storeId));
