@@ -22,6 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserResponseDto createUser(CreateUserRequestDto requestDto) {
+
         if (!UtilValidation.isValidPasswordFormat(requestDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "비밀번호는 최소 8자, 대소문자 포함한 영문, 숫자, 특수문자를 포함해야합니다.");
