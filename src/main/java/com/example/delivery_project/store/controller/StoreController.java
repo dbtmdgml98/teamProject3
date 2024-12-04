@@ -1,11 +1,17 @@
 package com.example.delivery_project.store.controller;
 
+import com.example.delivery_project.store.dto.ReadAllStoreResponseDto;
 import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +46,17 @@ public class StoreController {
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
+
+    // 가게 다건 조회
+    @GetMapping("/stores")
+    public ResponseEntity<Page<ReadAllStoreResponseDto>> findAllStore(@PageableDefault(page = 1)
+                                                                          @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                                                          Pageable pageable) {
+
+        Page<ReadAllStoreResponseDto> foundAllStore = storeService.findAllStore(pageable);
+        return new ResponseEntity<>(foundAllStore, HttpStatus.OK);
+    }
+
 
     // 가게 수정
     @PatchMapping("/owners/stores/{storeId}")
