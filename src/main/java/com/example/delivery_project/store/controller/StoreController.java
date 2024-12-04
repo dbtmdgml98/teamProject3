@@ -1,5 +1,6 @@
 package com.example.delivery_project.store.controller;
 
+import com.example.delivery_project.store.dto.ReadStoreResponseDto;
 import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
@@ -7,6 +8,7 @@ import com.example.delivery_project.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,15 @@ public class StoreController {
         StoreResponseDto createdStore = storeService.createStore(storeRequestDto);
 
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
+    }
+
+    // 가게 단건 조회
+    @GetMapping("/stores/{storeId}")
+    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
+
+        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId);
+
+        return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
 
     // 가게 수정
