@@ -48,11 +48,12 @@ public class Store extends TimeBaseEntity {
 
     public Store() {}
 
-    public Store(String name, LocalTime openTime, LocalTime closeTime, Integer minimumOrderPrice) {
+    public Store(String name, LocalTime openTime, LocalTime closeTime, Integer minimumOrderPrice, User user) {
         this.name = name;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.minimumOrderPrice = minimumOrderPrice;
+        this.user = user;
         this.storeStatus = StoreStatus.OPEN;
     }
 
