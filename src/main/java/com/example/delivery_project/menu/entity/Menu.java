@@ -2,6 +2,7 @@ package com.example.delivery_project.menu.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.dto.CreateMenuResponseDto;
+import com.example.delivery_project.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 
