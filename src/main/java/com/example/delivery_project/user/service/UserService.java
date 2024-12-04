@@ -4,7 +4,9 @@ import com.example.delivery_project.common.config.PasswordEncoder;
 import com.example.delivery_project.common.util.UtilValidation;
 import com.example.delivery_project.user.dto.CreateUserRequestDto;
 import com.example.delivery_project.user.dto.CreateUserResponseDto;
+import com.example.delivery_project.user.dto.DeleteUserRequestDto;
 import com.example.delivery_project.user.dto.LoginRequestDto;
+import com.example.delivery_project.user.dto.LoginUserDto;
 import com.example.delivery_project.user.entity.User;
 import com.example.delivery_project.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +53,7 @@ public class UserService {
         );
     }
 
-    public void login(HttpServletRequest request, LoginRequestDto requestDto) {
-        HttpSession session = request.getSession(true);
+    public LoginUserDto login(LoginRequestDto requestDto) {
 
         User findUser = userRepository.findByEmail(requestDto.getUserEmail());
 
@@ -64,8 +65,18 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다");
         }
 
-        session.setAttribute("userId", findUser.getId());
-        session.setAttribute("userAuthority", findUser.getAuthority());
+        return new LoginUserDto(findUser.getId(), findUser.getAuthority());
     }
 
+    public void deleteUser(Long userId, DeleteUserRequestDto requestDto) {
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다");
+        }
+
+        findUser.deleteUser();
+
+        userRepository.save(findUser);
+    }
 }
