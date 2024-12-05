@@ -2,10 +2,6 @@ package com.example.delivery_project.menu.controller;
 
 import com.example.delivery_project.menu.dto.*;
 import com.example.delivery_project.menu.service.MenuService;
-import com.example.delivery_project.store.entity.Store;
-import com.example.delivery_project.store.service.StoreService;
-import com.example.delivery_project.user.entity.User;
-import com.example.delivery_project.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
-    private final StoreService storeService;
-    private final UserService userService;
 
+    //메뉴 조회
     @GetMapping("/{storeId}/menus")
     public Page<ReadMenuResponseDto> findByAll(
             @PathVariable(name = "storeId") Long storeId,
             @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
-//        Store findStore = storeService.findById(storeId);
-//        ReadMenuResponseDto findMenu = menuService.findMenuById(findStore.getId());
-
         return menuService.getPostsPage(page,storeId);
     }
 
-
+    //메뉴 생성
     @PostMapping("/{storeId}/menus")
     public ResponseEntity<CreateMenuResponseDto> save(
             @PathVariable Long storeId,
@@ -48,6 +40,7 @@ public class MenuController {
         return new ResponseEntity<>(savedMenu, HttpStatus.CREATED);
 
     }
+    //메뉴 수정
     @PatchMapping("/{storeId}/menus")
     public ResponseEntity<CreateMenuResponseDto> update(
             @PathVariable Long storeId,
@@ -64,14 +57,14 @@ public class MenuController {
         return new ResponseEntity<>(updateMenu, HttpStatus.CREATED);
 
     }
+    //메뉴 삭제
     @DeleteMapping("/{storeId}/menus")
     public ResponseEntity<Void> delete(
             @PathVariable Long storeId,
-            @RequestBody MenuRequestDto requestDto,
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("userId");
-        menuService.deleteMenu(storeId,userId,requestDto);
+        menuService.deleteMenu(storeId,userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
