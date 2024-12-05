@@ -31,9 +31,6 @@ public class Review extends TimeBaseEntity {
     @Column(nullable = false)
     private String content;
 
-
-
-
     public Review() {
 
     }
@@ -51,6 +48,12 @@ public class Review extends TimeBaseEntity {
         this.starPoint = starPoint;
         this.content = content;
         this.store = store;
+    }
+
+    public Review(Order order, Integer starPoint, String content) {
+        this.order = order;
+        this.starPoint = starPoint;
+        this.content = content;
     }
 
     public static ReviewResponseDto toDto(Review review) {
