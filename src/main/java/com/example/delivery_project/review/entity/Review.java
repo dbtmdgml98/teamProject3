@@ -2,6 +2,7 @@ package com.example.delivery_project.review.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.order.entity.Order;
+import com.example.delivery_project.review.dto.ReadReviewResponseDto;
 import com.example.delivery_project.review.dto.ReviewResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.user.entity.User;
@@ -56,8 +57,8 @@ public class Review extends TimeBaseEntity {
         this.content = content;
     }
 
-    public static ReviewResponseDto toDto(Review review) {
-        return new ReviewResponseDto(
+    public static ReadReviewResponseDto toDto(Review review) {
+        return new ReadReviewResponseDto(
                 review.getId(),
                 review.getOrder().getId(),
                 review.getStore().getId(),

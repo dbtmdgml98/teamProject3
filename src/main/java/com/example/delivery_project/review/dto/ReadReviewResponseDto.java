@@ -25,8 +25,8 @@ public class ReadReviewResponseDto {
         this.createdAt = createdAt;
     }
 
-    public static ReviewResponseDto toDto(Review review) {
-        return new ReviewResponseDto(
+    public static ReadReviewResponseDto toDto(Review review) {
+        return new ReadReviewResponseDto(
                 review.getId(),
                 review.getOrder().getId(),
                 review.getStore().getId(),
