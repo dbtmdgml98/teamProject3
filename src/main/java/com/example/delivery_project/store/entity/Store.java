@@ -1,6 +1,7 @@
 package com.example.delivery_project.store.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
+import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.user.entity.User;
 import jakarta.persistence.Column;
@@ -12,10 +13,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,6 +49,9 @@ public class Store extends TimeBaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menus = new ArrayList<>();
 
     public Store() {}
 
