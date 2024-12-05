@@ -2,7 +2,6 @@ package com.example.delivery_project.menu.repository;
 
 import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.menu.entity.MenuDelete;
-import com.example.delivery_project.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

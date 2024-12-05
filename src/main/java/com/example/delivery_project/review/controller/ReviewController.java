@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/stores")
@@ -25,5 +27,13 @@ public class ReviewController {
         ReviewResponseDto createdReview = reviewService.createReview(orderId, reviewRequestDto);
 
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{storeId}/review")
+    public Page<ReviewResponseDto> findByAll(
+            @PathVariable(name = "storeId") Long storeId,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        return reviewService.getPostsPage(page,storeId);
     }
 }

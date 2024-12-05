@@ -6,9 +6,16 @@ import com.example.delivery_project.order.repository.OrderRepository;
 import com.example.delivery_project.review.dto.ReviewRequestDto;
 import com.example.delivery_project.review.dto.ReviewResponseDto;
 import com.example.delivery_project.review.entity.Review;
+import com.example.delivery_project.review.dto.ReadReviewResponseDto;
 import com.example.delivery_project.review.repository.ReviewRepository;
+import com.example.delivery_project.store.entity.Store;
+import com.example.delivery_project.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +25,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final StoreService storeService;
 
     public ReviewResponseDto createReview(Long orderId, ReviewRequestDto reviewRequestDto) {
 
@@ -34,4 +42,13 @@ public class ReviewService {
 
         return new ReviewResponseDto(savedReview.getId(), savedReview.getOrder().getId(), savedReview.getContent(), savedReview.getStarPoint(), savedReview.getCreatedAt(), savedReview.getModifiedAt());
     }
+
+    public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId) {
+        Store findStore = storeService.findById(storeId);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+
+        return reviewRepository.findAllByStoreId(findStore.getId(),pageable).map(ReadReviewResponseDto::toDto);
+    }
+
+
 }
