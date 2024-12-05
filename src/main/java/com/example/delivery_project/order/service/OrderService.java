@@ -36,7 +36,6 @@ public class OrderService {
     @Transactional
     public OrderResponseDto orderFinished(OrderRequestDto orderRequestDto, Long userId) {
 
-
         User findUser = userRepository.findByIdOrElseThrow(userId);
         Menu findMenu = orderMenuRepository.findByIdOrElseThrow(orderRequestDto.getMenuId());
         Store findStore = findMenu.getStore();
@@ -44,7 +43,7 @@ public class OrderService {
         LocalTime openTime = findStore.getOpenTime();
         LocalTime closeTime = findStore.getCloseTime();
 
-        if (openTime.isBefore(nowTime) || closeTime.isAfter(nowTime)) {
+        if (!openTime.isBefore(nowTime) || !closeTime.isAfter(nowTime)) {
             throw new OrderException(ErrorCode.NOT_OPEN_OR_CLOSE_STORE);
         }
         int findPrice = findMenu.getPrice();
@@ -61,11 +60,18 @@ public class OrderService {
     }
 
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequestDto) {
+//        Order findOrder = findOderById(orderId);
+//        Menu findMenu = orderMenuRepository.findByIdOrElseThrow(orderRequestDto.getMenuId());
+//        Store findStore = findMenu.getStore();
+//
+//        User findUser = userRepository.findByIdOrElseThrow(findStore.getUser());
+//        findOrder.updateOrderStatus(orderRequestDto);
+//
+//        Order savedOrder = orderRepository.save(findOrder);
         Order findOrder = findOderById(orderId);
         findOrder.updateOrderStatus(orderRequestDto);
 
         Order savedOrder = orderRepository.save(findOrder);
-
         return new OrderResponseDto(savedOrder);
     }
 }
