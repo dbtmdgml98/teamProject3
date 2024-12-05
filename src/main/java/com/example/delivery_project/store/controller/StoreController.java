@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -49,9 +48,12 @@ public class StoreController {
 
     // 가게 단건 조회
     @GetMapping("/stores")
-    public ResponseEntity<ReadStoreResponseDto> findStoreByName(@RequestParam String name) {
+    public ResponseEntity<ReadStoreResponseDto> findStoreByName(@RequestParam String storeName, HttpServletRequest request) {
 
-        ReadStoreResponseDto foundStore = storeService.findStoreByName(name);
+        HttpSession session = request.getSession();
+        Authority authority = (Authority) session.getAttribute("userAuthority");
+
+        ReadStoreResponseDto foundStore = storeService.findStoreByName(storeName, authority);
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
