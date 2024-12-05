@@ -13,10 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import static com.example.delivery_project.user.entity.Authority.USER;
 
 
 @Service
@@ -26,26 +27,16 @@ public class MenuService {
     private final StoreService storeService;
     private final UserService userService;
 
-    public Menu findById(Long userId) {
-        return menuRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
-    }
 
-    public ReadMenuResponseDto findMenuById(Long id) {
-
-        Menu findMenu = findById(id);
-        return ReadMenuResponseDto.toDto(findMenu);
-    }
     @Transactional
     public CreateMenuResponseDto save(Long storeId, Long userId, CreateMenuRequestDto requestDto){
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
-        if(loginUser.getAuthority().equals(USER)){
-            throw new IllegalArgumentException("주인이 아닙니다.");
-        }
 
+        //해당 가게 주인이 아닐 경우
         if(!findStore.getUser().getId().equals(loginUser.getId())){
-            throw new IllegalArgumentException("가게주인이 아닙니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
 
@@ -62,40 +53,32 @@ public class MenuService {
         return menuRepository.findAllByStoreIdAndMenuDelete(findMenu.getStoreId(), MenuDelete.ACTIVE,pageable).map(ReadMenuResponseDto::toDto);
     }
     @Transactional
-    public CreateMenuResponseDto updateMenu(Long storeId, Long userId, UpdateMenuStatusRequestDto requestDto) {
+    public CreateMenuResponseDto updateMenu(Long storeId, Long userId, UpdateMenuStatusRequestDto requestDto, Long menuId) {
 
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
 
-        if(loginUser.getAuthority().equals(USER)){
-            throw new IllegalArgumentException("주인이 아닙니다.");
-        }
-
         if(!findStore.getUser().getId().equals(loginUser.getId())){
-            throw new IllegalArgumentException("가게주인이 아닙니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
-        Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
 
         findMenu.updateMenu(requestDto.getName(), requestDto.getPrice(), requestDto.getMenuDelete());
         return Menu.toDto(findMenu);
     }
     @Transactional
-    public void deleteMenu(Long storeId, Long userId,MenuRequestDto requestDto) {
+    public void deleteMenu(Long storeId, Long userId,Long menuId) {
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
 
-        if(loginUser.getAuthority().equals(USER)){
-            throw new IllegalArgumentException("주인이 아닙니다.");
-        }
-
         if(!findStore.getUser().getId().equals(loginUser.getId())){
-            throw new IllegalArgumentException("가게주인이 아닙니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
-        Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new IllegalArgumentException("메뉴 를 찾을 수 없습니다."));
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
 
         findMenu.setMenu();
         menuRepository.save(findMenu);
