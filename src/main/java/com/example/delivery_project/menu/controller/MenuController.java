@@ -11,13 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/owners/stores/")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
 
     //메뉴 조회
-    @GetMapping("/{storeId}/menus")
+    @GetMapping("/stores/{storeId}/menus")
     public Page<ReadMenuResponseDto> findByAll(
             @PathVariable(name = "storeId") Long storeId,
             @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
@@ -26,7 +26,7 @@ public class MenuController {
     }
 
     //메뉴 생성
-    @PostMapping("/{storeId}/menus")
+    @PostMapping("/owners/stores/{storeId}/menus")
     public ResponseEntity<CreateMenuResponseDto> save(
             @PathVariable Long storeId,
             @RequestBody CreateMenuRequestDto requestDto,
@@ -41,7 +41,7 @@ public class MenuController {
 
     }
     //메뉴 수정
-    @PatchMapping("/{storeId}/menus/{menuId}")
+    @PatchMapping("/owners/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<CreateMenuResponseDto> update(
             @PathVariable Long storeId,
             @PathVariable Long menuId,
@@ -59,7 +59,7 @@ public class MenuController {
 
     }
     //메뉴 삭제
-    @DeleteMapping("/{storeId}/menus/{menuId}")
+    @DeleteMapping("/owners/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<Void> delete(
             @PathVariable Long storeId,
             @PathVariable Long menuId,
@@ -72,3 +72,4 @@ public class MenuController {
     }
 
 }
+
