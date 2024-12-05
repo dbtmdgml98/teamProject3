@@ -43,6 +43,7 @@ public class OrderService {
         LocalTime nowTime = LocalTime.now();
         LocalTime openTime = findStore.getOpenTime();
         LocalTime closeTime = findStore.getCloseTime();
+
         if (openTime.isBefore(nowTime) || closeTime.isAfter(nowTime)) {
             throw new OrderException(ErrorCode.NOT_OPEN_OR_CLOSE_STORE);
         }
