@@ -1,5 +1,6 @@
 package com.example.delivery_project.review.controller;
 
+import com.example.delivery_project.review.dto.ReadReviewResponseDto;
 import com.example.delivery_project.review.dto.ReviewRequestDto;
 import com.example.delivery_project.review.dto.ReviewResponseDto;
 import com.example.delivery_project.review.service.ReviewService;
@@ -30,7 +31,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{storeId}/review")
-    public Page<ReviewResponseDto> findByAll(
+    public Page<ReadReviewResponseDto> findByAll(
             @PathVariable(name = "storeId") Long storeId,
             @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
