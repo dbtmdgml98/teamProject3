@@ -18,9 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
-import static com.example.delivery_project.user.entity.Authority.USER;
 
 
 @Service
@@ -35,10 +32,7 @@ public class MenuService {
     public CreateMenuResponseDto save(Long storeId, Long userId, CreateMenuRequestDto requestDto){
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
-        //유저가 USER 인 경우 에러
-        if(loginUser.getAuthority().equals(USER)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사장님 권한을 가진 유저만 가게를 만들 수 있습니다.");
-        }
+
 
         //해당 가게 주인이 아닐 경우
         if(!findStore.getUser().getId().equals(loginUser.getId())){
@@ -65,16 +59,11 @@ public class MenuService {
         User loginUser = userService.findById(userId);
 
 
-        if(loginUser.getAuthority().equals(USER)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사장님 권한을 가진 유저만 가게를 만들 수 있습니다.");
-        }
-
         if(!findStore.getUser().getId().equals(loginUser.getId())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
-//        Menu findMenu = menuRepository.findById(findStore.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."));
-        Menu findMenu = menuRepository.findById(menuId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."));;
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
 
         findMenu.updateMenu(requestDto.getName(), requestDto.getPrice(), requestDto.getMenuDelete());
         return Menu.toDto(findMenu);
@@ -84,15 +73,12 @@ public class MenuService {
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
-        if(loginUser.getAuthority().equals(USER)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사장님 권한을 가진 유저만 가게를 만들 수 있습니다.");
-        }
 
         if(!findStore.getUser().getId().equals(loginUser.getId())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
-        Menu findMenu = menuRepository.findById(menuId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."));;
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
 
         findMenu.setMenu();
         menuRepository.save(findMenu);
