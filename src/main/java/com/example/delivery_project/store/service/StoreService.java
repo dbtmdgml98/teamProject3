@@ -26,12 +26,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
 
-    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Authority authority, Long userId) {
-
-        // 사징님이 아닌 경우
-        if (!authority.equals(Authority.OWNER)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사장님 권한을 가진 유저만 가게를 만들 수 있습니다.");
-        }
+    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Long userId) {
 
         // 가게 이름이 이미 존재하는 경우
         Store findStoreByName = storeRepository.findByName(storeRequestDto.getName());
