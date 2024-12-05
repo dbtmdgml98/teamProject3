@@ -1,39 +1,25 @@
 package com.example.delivery_project.review.dto;
 
-import com.example.delivery_project.menu.dto.ReadMenuResponseDto;
-import com.example.delivery_project.menu.entity.Menu;
-import com.example.delivery_project.review.entity.Review;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class ReviewResponseDto {
-    private Long Id;
-    private Long orderId;
-    private Long storeId;
-    private Integer starPoint;
-    private String content;
-    private LocalDateTime createdAt;
 
-    public ReviewResponseDto(Long id, Long orderId, Long storeId, Integer starPoint, String content, LocalDateTime createdAt) {
-        this.Id = id;
+    private final Long reviewId;
+    private final Long orderId;
+    private final String content;
+    private final Integer starPoint;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
+
+    public ReviewResponseDto(Long reviewId, Long orderId, String content, Integer starPoint, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.reviewId = reviewId;
         this.orderId = orderId;
-        this.storeId = storeId;
-        this.starPoint = starPoint;
         this.content = content;
+        this.starPoint = starPoint;
         this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
-
-    public static ReviewResponseDto toDto(Review review) {
-        return new ReviewResponseDto(
-                review.getId(),
-                review.getOrder().getId(),
-                review.getStore().getId(),
-                review.getStarPoint(),
-                review.getContent(),
-                review.getCreatedAt()
-        );
-    }
-
 }
