@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Getter
-@Table(name = "`order`")
+@Table(name = "orders")
 public class Order extends TimeBaseEntity {
 
     @Id
