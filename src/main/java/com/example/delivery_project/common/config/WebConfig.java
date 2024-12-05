@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 //인증, 인가 수행할 때 사용할 Config 파일
 //일단 프로젝트 과정 중 편의를 위해 인증 인가 안걸리게 주석처리 해둠
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     //인가 포함 경로
     private static final String[] AUTHORIZATION_REQUIRED_PATHS = {
-        "/api/owners/**", // 모든 가게 관련 경로
+        "/api/owners/**", // 모든 사장 관련 경로
     };
 
 
