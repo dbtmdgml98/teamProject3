@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.delivery_project.user.entity.Authority.USER;
 
 
 @Service
@@ -38,7 +39,7 @@ public class MenuService {
         Store findStore = storeService.findById(storeId);
         User loginUser = userService.findById(userId);
 
-        if(loginUser.getAuthority().equals(0)){
+        if(loginUser.getAuthority().equals(USER)){
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
 
@@ -51,8 +52,11 @@ public class MenuService {
         return Menu.toDto(savedMenu);
     }
 
-    public Page<ReadMenuResponseDto> getPostsPage(int pageNo, ReadMenuResponseDto findMenu) {
-        Pageable pageable = PageRequest.of(pageNo, 10,Sort.by("createdAt").descending());
+    public Page<ReadMenuResponseDto> getPostsPage(int page, Long storeId) {
+        Store findStore = storeService.findById(storeId);
+        ReadMenuResponseDto findMenu = ReadMenuResponseDto.toDto(menuRepository.findMenuByMenuId(findStore.getId()));
+
+        Pageable pageable = PageRequest.of(page, 10,Sort.by("createdAt").descending());
 
         return menuRepository.findAllByStoreId(findMenu.getStoreId(), pageable).map(ReadMenuResponseDto::toDto);
     }
@@ -63,7 +67,7 @@ public class MenuService {
         User loginUser = userService.findById(userId);
 
 
-        if(loginUser.getAuthority().equals(0)){
+        if(loginUser.getAuthority().equals(USER)){
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
 
@@ -82,7 +86,7 @@ public class MenuService {
         User loginUser = userService.findById(userId);
 
 
-        if(loginUser.getAuthority().equals(0)){
+        if(loginUser.getAuthority().equals(USER)){
             throw new IllegalArgumentException("주인이 아닙니다.");
         }
 
@@ -94,8 +98,6 @@ public class MenuService {
 
         findMenu.setMenu();
         menuRepository.save(findMenu);
-
-//        menuRepository.delete(findMenu);
     }
 
 }

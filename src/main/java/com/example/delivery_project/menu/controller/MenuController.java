@@ -27,20 +27,12 @@ public class MenuController {
             @PathVariable(name = "storeId") Long storeId,
             @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
-        Store findStore = storeService.findById(storeId);
-        ReadMenuResponseDto findMenu = menuService.findMenuById(findStore.getId());
-
-        return menuService.getPostsPage(page,findMenu);
-    }
-
-//    @GetMapping("/{storeId}/menus/wow")
-//    public ResponseEntity<ReadMenuResponseDto> findById(@PathVariable(name = "storeId") Long storeId) {
-//
 //        Store findStore = storeService.findById(storeId);
 //        ReadMenuResponseDto findMenu = menuService.findMenuById(findStore.getId());
-//
-//        return new ResponseEntity<>(findMenu, HttpStatus.OK);
-//    }
+
+        return menuService.getPostsPage(page,storeId);
+    }
+
 
     @PostMapping("/{storeId}/menus")
     public ResponseEntity<CreateMenuResponseDto> save(
@@ -63,11 +55,8 @@ public class MenuController {
             HttpServletRequest request){
 
         HttpSession session = request.getSession(false);
-//        Store findStore = storeService.findById(storeId);
-
 
         Long userId = (Long) session.getAttribute("userId");
-//        User findUser = userService.findById(userId);
 
         CreateMenuResponseDto updateMenu = menuService.updateMenu(storeId,userId,requestDto);
 
