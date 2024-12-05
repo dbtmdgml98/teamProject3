@@ -39,9 +39,8 @@ public class StoreController {
 
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute("userId");
-        Authority authority = (Authority) session.getAttribute("userAuthority");
 
-        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, authority, userId);
+        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, userId);
 
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }

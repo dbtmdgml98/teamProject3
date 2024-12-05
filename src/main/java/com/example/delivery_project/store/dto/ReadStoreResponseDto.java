@@ -1,11 +1,14 @@
 package com.example.delivery_project.store.dto;
 
+import com.example.delivery_project.menu.dto.MenuResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.entity.StoreStatus;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class ReadStoreResponseDto {
@@ -16,16 +19,18 @@ public class ReadStoreResponseDto {
     private final LocalTime openTime;
     private final LocalTime closeTime;
     private final Integer minimumOrderPrice;
+    private final List<MenuResponseDto> menus;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public ReadStoreResponseDto(Long storeId, String name, StoreStatus storeStatus, LocalTime openTime, LocalTime closeTime, Integer minimumOrderPrice, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ReadStoreResponseDto(Long storeId, String name, StoreStatus storeStatus, LocalTime openTime, LocalTime closeTime, Integer minimumOrderPrice, List<MenuResponseDto> menus, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.storeId = storeId;
         this.name = name;
         this.storeStatus = storeStatus;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.minimumOrderPrice = minimumOrderPrice;
+        this.menus = menus;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -39,6 +44,9 @@ public class ReadStoreResponseDto {
                 store.getOpenTime(),
                 store.getCloseTime(),
                 store.getMinimumOrderPrice(),
+                store.getMenus().stream()
+                        .map(MenuResponseDto::toDto)
+                        .collect(Collectors.toList()),
                 store.getCreatedAt(),
                 store.getModifiedAt()
         );
