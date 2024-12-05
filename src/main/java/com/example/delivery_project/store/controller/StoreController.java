@@ -47,27 +47,31 @@ public class StoreController {
     }
 
     // 가게 단건 조회
-    @GetMapping("/stores")
-    public ResponseEntity<ReadStoreResponseDto> findStoreByName(@RequestParam String storeName, HttpServletRequest request) {
+    @GetMapping("/stores/{storeId}")
+    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable Long storeId, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         Authority authority = (Authority) session.getAttribute("userAuthority");
 
-        ReadStoreResponseDto foundStore = storeService.findStoreByName(storeName, authority);
+        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId, authority);
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
 
     // 가게 다건 조회
-    @GetMapping("/stores/all")
+    @GetMapping("/stores")
     public ResponseEntity<Page<ReadAllStoreResponseDto>> findAllStore(@PageableDefault(page = 1)
                                                                           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                                                          Pageable pageable) {
+                                                                          Pageable pageable,
+                                                                      @RequestParam(required = false) String storeName,
+                                                                      HttpServletRequest request) {
 
-        Page<ReadAllStoreResponseDto> foundAllStore = storeService.findAllStore(pageable);
+        HttpSession session = request.getSession();
+        Authority authority = (Authority) session.getAttribute("userAuthority");
+
+        Page<ReadAllStoreResponseDto> foundAllStore = storeService.findAllStore(pageable, storeName, authority);
         return new ResponseEntity<>(foundAllStore, HttpStatus.OK);
     }
-
 
     // 가게 수정
     @PatchMapping("/owners/stores/{storeId}")

@@ -57,9 +57,9 @@ public class StoreService {
         return storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
     }
 
-    public ReadStoreResponseDto findStoreByName(String name, Authority authority) {
+    public ReadStoreResponseDto findStoreById(Long storeId, Authority authority) {
 
-        Store findStore = storeRepository.findByName(name);
+        Store findStore = findById(storeId);
 
         // 고객이 폐업된 가게 조회하는 경우
         if (!authority.equals(Authority.OWNER) && findStore.getStoreStatus().equals(StoreStatus.CLOSE)) {
@@ -70,11 +70,32 @@ public class StoreService {
     }
 
     @Transactional
-    public Page<ReadAllStoreResponseDto> findAllStore(Pageable pageable) {
+    public Page<ReadAllStoreResponseDto> findAllStore(Pageable pageable, String storeName, Authority authority) {
 
-        Page<Store> storesPages = storeRepository.findAll(pageable);
+        // 고객인 경우 -> 페이지네이션에서 폐업된 가게 제외, 사장인 경우 -> 모두 조회 가능
+        Page<Store> storesPages;
+        Page<Store> allByName;
+        if (!authority.equals(Authority.OWNER)) {
 
-        return storesPages.map(ReadAllStoreResponseDto::toDto);
+            // storeName이 없으면 페이지 전체 조회, 있으면 검색
+            if (storeName == null) {
+                storesPages = storeRepository.findAllByStoreStatus(pageable, StoreStatus.OPEN);
+                return storesPages.map(ReadAllStoreResponseDto::toDto);
+            } else {
+                allByName = storeRepository.findAllByStoreStatusAndNameIsContaining(pageable, StoreStatus.OPEN, storeName);
+                return allByName.map(ReadAllStoreResponseDto::toDto);
+            }
+        } else {
+
+            // storeName이 없으면 페이지 전체 조회, 있으면 검색
+            if (storeName == null) {
+                storesPages = storeRepository.findAll(pageable);
+                return storesPages.map(ReadAllStoreResponseDto::toDto);
+            } else {
+                allByName = storeRepository.findAllByNameIsContaining(pageable, storeName);
+                return allByName.map(ReadAllStoreResponseDto::toDto);
+            }
+        }
     }
 
     public StoreResponseDto updateStore(Long id, StoreRequestDto storeRequestDto) {
