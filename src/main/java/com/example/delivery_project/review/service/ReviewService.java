@@ -1,6 +1,6 @@
 package com.example.delivery_project.review.service;
 
-import com.example.delivery_project.review.controller.ReviewController;
+import com.example.delivery_project.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final ReviewController reviewController;
+    private final ReviewRepository reviewRepository;
 
 }
