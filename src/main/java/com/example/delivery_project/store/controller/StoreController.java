@@ -6,6 +6,7 @@ import com.example.delivery_project.store.dto.StoreRequestDto;
 import com.example.delivery_project.store.dto.StoreResponseDto;
 import com.example.delivery_project.store.dto.UpdateStoreStatusResponseDto;
 import com.example.delivery_project.store.service.StoreService;
+import com.example.delivery_project.user.entity.Authority;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -38,27 +39,27 @@ public class StoreController {
 
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute("userId");
+        Authority authority = (Authority) session.getAttribute("userAuthority");
 
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "해당 유저가 존재하지 않습니다.");
-        }
-
-        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, userId);
+        StoreResponseDto createdStore = storeService.createStore(storeRequestDto, authority, userId);
 
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }
 
     // 가게 단건 조회
-    @GetMapping("/stores/{storeId}")
-    public ResponseEntity<ReadStoreResponseDto> findStoreById(@PathVariable(name = "storeId") Long storeId) {
+    @GetMapping("/stores")
+    public ResponseEntity<ReadStoreResponseDto> findStoreByName(@RequestParam String storeName, HttpServletRequest request) {
 
-        ReadStoreResponseDto foundStore = storeService.findStoreById(storeId);
+        HttpSession session = request.getSession();
+        Authority authority = (Authority) session.getAttribute("userAuthority");
+
+        ReadStoreResponseDto foundStore = storeService.findStoreByName(storeName, authority);
 
         return new ResponseEntity<>(foundStore, HttpStatus.OK);
     }
 
     // 가게 다건 조회
-    @GetMapping("/stores")
+    @GetMapping("/stores/all")
     public ResponseEntity<Page<ReadAllStoreResponseDto>> findAllStore(@PageableDefault(page = 1)
                                                                           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                                           Pageable pageable) {
@@ -80,9 +81,13 @@ public class StoreController {
 
     // 가게 폐업
     @PatchMapping("/owners/stores/status/{storeId}")
-    public ResponseEntity<UpdateStoreStatusResponseDto> updateStoreStatus(@PathVariable(name = "storeId") Long storeId) {
+    public ResponseEntity<UpdateStoreStatusResponseDto> updateStoreStatus(@PathVariable(name = "storeId") Long storeId, HttpServletRequest request) {
 
-        UpdateStoreStatusResponseDto updateStoreStatus = storeService.updateStoreStatus(storeId);
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+        Authority authority = (Authority) session.getAttribute("userAuthority");
+
+        UpdateStoreStatusResponseDto updateStoreStatus = storeService.updateStoreStatus(storeId, userId, authority);
 
         return new ResponseEntity<>(updateStoreStatus, HttpStatus.OK);
     }
