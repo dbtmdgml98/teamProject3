@@ -4,6 +4,7 @@ import com.example.delivery_project.review.dto.ReviewResponseDto;
 import com.example.delivery_project.review.repository.ReviewRepository;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.service.StoreService;
+import com.example.delivery_project.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

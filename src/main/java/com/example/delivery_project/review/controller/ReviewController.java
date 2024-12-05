@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/stores")
+@RequestMapping("/api/stores/{storeId}/comments")
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
