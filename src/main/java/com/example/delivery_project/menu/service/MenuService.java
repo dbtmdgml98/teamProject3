@@ -2,6 +2,7 @@ package com.example.delivery_project.menu.service;
 
 import com.example.delivery_project.menu.dto.*;
 import com.example.delivery_project.menu.entity.Menu;
+import com.example.delivery_project.menu.entity.MenuDelete;
 import com.example.delivery_project.menu.repository.MenuRepository;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.store.service.StoreService;
@@ -58,7 +59,7 @@ public class MenuService {
 
         Pageable pageable = PageRequest.of(page, 10,Sort.by("createdAt").descending());
 
-        return menuRepository.findAllByStoreId(findMenu.getStoreId(), pageable).map(ReadMenuResponseDto::toDto);
+        return menuRepository.findAllByStoreIdAndMenuDelete(findMenu.getStoreId(), MenuDelete.ACTIVE,pageable).map(ReadMenuResponseDto::toDto);
     }
     @Transactional
     public CreateMenuResponseDto updateMenu(Long storeId, Long userId, UpdateMenuStatusRequestDto requestDto) {
