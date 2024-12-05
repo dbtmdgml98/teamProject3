@@ -53,12 +53,19 @@ public class StoreService {
     }
 
     public Store findById(Long id) {
+
         return storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "해당하는 가게가 존재하지 않습니다."));
     }
 
-    public ReadStoreResponseDto findStoreByName(String name) {
+    public ReadStoreResponseDto findStoreByName(String name, Authority authority) {
 
         Store findStore = storeRepository.findByName(name);
+
+        // 고객이 폐업된 가게 조회하는 경우
+        if (!authority.equals(Authority.OWNER) && findStore.getStoreStatus().equals(StoreStatus.CLOSE)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "고객인 일반 유저는 폐업된 가게를 조회할 수 없습니다.");
+        }
+
         return ReadStoreResponseDto.toDto(findStore);
     }
 
@@ -83,7 +90,6 @@ public class StoreService {
     public UpdateStoreStatusResponseDto updateStoreStatus(Long storeId, Long userId, Authority authority) {
 
         Store findStore = findById(storeId);
-        User findUser = userRepository.findByIdOrElseThrow(userId);
 
         // 가게 사장이 아닌 경우 (다른 사장이 삭제하는 경우 & 고객이 삭제하는 경우)
         if (!authority.equals(Authority.OWNER) || !findStore.getUser().getId().equals(userId)) {
