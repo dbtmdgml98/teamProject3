@@ -45,5 +45,4 @@ public class Order extends TimeBaseEntity {
         this.orderStatus = orderRequestDto.getOrderStatus();
     }
 
-
 }
