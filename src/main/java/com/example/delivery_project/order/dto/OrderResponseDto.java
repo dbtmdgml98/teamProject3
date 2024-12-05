@@ -20,7 +20,4 @@ public class OrderResponseDto {
         this.menuId = order.getMenu().getMenuId();
         this.orderStatus = order.getOrderStatus().toString();
     }
-
-
-
 }
