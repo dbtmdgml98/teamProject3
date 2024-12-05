@@ -19,9 +19,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
 
-    public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto) {
+    public ReviewResponseDto createReview(Long orderId, ReviewRequestDto reviewRequestDto) {
 
-        Order foundOrder = orderRepository.findByIdOrElseThrow(reviewRequestDto.getOrderId());
+        Order foundOrder = orderRepository.findByIdOrElseThrow(orderId);
 
         // 배달 완료 되지 않은 주문일 경우
         if (!foundOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
