@@ -4,6 +4,7 @@ import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.menu.repository.MenuRepository;
 import com.example.delivery_project.order.dto.OrderRequestDto;
 import com.example.delivery_project.order.dto.OrderResponseDto;
+import com.example.delivery_project.order.dto.UpdateOrderRequestDto;
 import com.example.delivery_project.order.entity.Order;
 import com.example.delivery_project.order.entity.OrderStatus;
 import com.example.delivery_project.order.exception.ErrorCode;
@@ -16,9 +17,6 @@ import com.example.delivery_project.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Service
@@ -28,7 +26,6 @@ public class OrderService {
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
     private final OrderMenuRepository orderMenuRepository;
-
     public Order findOderById(Long id) {
 
         return orderRepository.findByIdOrElseThrow(id);
@@ -52,14 +49,16 @@ public class OrderService {
         if (findStore.getMinimumOrderPrice() > findPrice) {
             throw new OrderException(ErrorCode.MINIMUM_PRICE_NOT_ENOUGH);
         }
+
         Order order = new Order(findUser,findMenu);
+        order.setOrderStatus(OrderStatus.ORDER_FINISHED);
 
         orderRepository.save(order);
 
         return new OrderResponseDto(order);
     }
 
-    public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequestDto) {
+    public OrderResponseDto updateOrder(Long orderId, UpdateOrderRequestDto orderRequestDto) {
 //        Order findOrder = findOderById(orderId);
 //        Menu findMenu = orderMenuRepository.findByIdOrElseThrow(orderRequestDto.getMenuId());
 //        Store findStore = findMenu.getStore();

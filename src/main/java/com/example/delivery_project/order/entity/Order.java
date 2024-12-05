@@ -3,12 +3,11 @@ package com.example.delivery_project.order.entity;
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.order.dto.OrderRequestDto;
+import com.example.delivery_project.order.dto.UpdateOrderRequestDto;
 import com.example.delivery_project.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
+import lombok.Setter;
 
 
 @Entity
@@ -20,6 +19,7 @@ public class Order extends TimeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -41,7 +41,7 @@ public class Order extends TimeBaseEntity {
         this.menu = menu;
     }
 
-    public void updateOrderStatus(OrderRequestDto orderRequestDto) {
+    public void updateOrderStatus(UpdateOrderRequestDto orderRequestDto) {
         this.orderStatus = orderRequestDto.getOrderStatus();
     }
 

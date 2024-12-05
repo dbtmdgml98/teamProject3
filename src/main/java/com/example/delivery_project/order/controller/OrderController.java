@@ -2,6 +2,8 @@ package com.example.delivery_project.order.controller;
 
 import com.example.delivery_project.order.dto.OrderRequestDto;
 import com.example.delivery_project.order.dto.OrderResponseDto;
+import com.example.delivery_project.order.dto.UpdateOrderRequestDto;
+import com.example.delivery_project.order.dto.UpdateOrderResponseDto;
 import com.example.delivery_project.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,8 +31,8 @@ public class OrderController {
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(
             @PathVariable(name = "orderId") Long orderId,
-            @RequestBody OrderRequestDto orderRequestDto) {
-        OrderResponseDto updateOrder = orderService.updateOrder(orderId, orderRequestDto);
+            @RequestBody UpdateOrderRequestDto updateorderRequestDto) {
+        OrderResponseDto updateOrder = orderService.updateOrder(orderId, updateorderRequestDto);
 
         return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
