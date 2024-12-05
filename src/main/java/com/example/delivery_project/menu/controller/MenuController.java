@@ -41,9 +41,10 @@ public class MenuController {
 
     }
     //메뉴 수정
-    @PatchMapping("/{storeId}/menus")
+    @PatchMapping("/{storeId}/menus/{menuId}")
     public ResponseEntity<CreateMenuResponseDto> update(
             @PathVariable Long storeId,
+            @PathVariable Long menuId,
             @RequestBody UpdateMenuStatusRequestDto requestDto,
             HttpServletRequest request){
 
@@ -51,20 +52,21 @@ public class MenuController {
 
         Long userId = (Long) session.getAttribute("userId");
 
-        CreateMenuResponseDto updateMenu = menuService.updateMenu(storeId,userId,requestDto);
+        CreateMenuResponseDto updateMenu = menuService.updateMenu(storeId,userId,requestDto,menuId);
 
 
         return new ResponseEntity<>(updateMenu, HttpStatus.CREATED);
 
     }
     //메뉴 삭제
-    @DeleteMapping("/{storeId}/menus")
+    @DeleteMapping("/{storeId}/menus/{menuId}")
     public ResponseEntity<Void> delete(
             @PathVariable Long storeId,
+            @PathVariable Long menuId,
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("userId");
-        menuService.deleteMenu(storeId,userId);
+        menuService.deleteMenu(storeId,userId,menuId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
