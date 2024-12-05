@@ -25,6 +25,10 @@ public class Review extends TimeBaseEntity {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
     @Column(nullable = false)
     private Integer starPoint;
@@ -36,19 +40,14 @@ public class Review extends TimeBaseEntity {
 
     }
 
-    public Review(Long id, Order order, Integer starPoint, String content) {
-        Id = id;
-        this.order = order;
-        this.starPoint = starPoint;
-        this.content = content;
-    }
 
-    public Review(Long id, Order order, Integer starPoint, String content, Store store) {
+    public Review(Long id, Order order, Store store, User user, Integer starPoint, String content) {
         Id = id;
         this.order = order;
+        this.store = store;
+        this.user = user;
         this.starPoint = starPoint;
         this.content = content;
-        this.store = store;
     }
 
     public Review(Order order, Integer starPoint, String content) {
@@ -57,15 +56,5 @@ public class Review extends TimeBaseEntity {
         this.content = content;
     }
 
-    public static ReadReviewResponseDto toDto(Review review) {
-        return new ReadReviewResponseDto(
-                review.getId(),
-                review.getOrder().getId(),
-                review.getStore().getId(),
-                review.getStarPoint(),
-                review.getContent(),
-                review.getCreatedAt()
-        );
-    }
 
 }

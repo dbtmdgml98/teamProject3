@@ -43,11 +43,11 @@ public class ReviewService {
         return new ReviewResponseDto(savedReview.getId(), savedReview.getOrder().getId(), savedReview.getContent(), savedReview.getStarPoint(), savedReview.getCreatedAt(), savedReview.getModifiedAt());
     }
 
-    public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId) {
+    public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId,Long userId) {
         Store findStore = storeService.findById(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
-        return reviewRepository.findAllByStoreId(findStore.getId(),pageable).map(ReadReviewResponseDto::toDto);
+        return reviewRepository.findAllByStoreId(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
     }
 
 
