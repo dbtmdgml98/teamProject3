@@ -13,7 +13,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Store findByName(String name);
 
-    Page<Store> findAll(Pageable pageable);
-
     Long countByUserAndStoreStatus(User user, StoreStatus storeStatus);
+
+    Page<Store> findAllByStoreStatus(Pageable pageable, StoreStatus storeStatus);
+
+    Page<Store> findAllByNameIsContaining(Pageable pageable, String storeName);
+
+    Page<Store> findAllByStoreStatusAndNameIsContaining(Pageable pageable, StoreStatus storeStatus, String storeName);
 }
