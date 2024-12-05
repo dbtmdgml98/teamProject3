@@ -11,10 +11,12 @@ public enum OrderStatus {
     NOW_DELIVERY("배달 중"),
     DELIVERY_FINISHED("배달 완료");
 
+    private final String description;
+
     OrderStatus(String description) {
         this.description = description;
     }
 
-    private final String description;
+
 
 }

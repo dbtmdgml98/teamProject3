@@ -8,17 +8,21 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.ColumnDefault;
+
 
 
 @Entity
 @Getter
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -28,10 +32,7 @@ public class Order extends TimeBaseEntity {
     @JoinColumn(name = "menuId")
     private Menu menu;
 
-    @Column(nullable = false)
-    @ColumnDefault("ORDER_FINISHED")
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+
 
     public Order() {}
 
