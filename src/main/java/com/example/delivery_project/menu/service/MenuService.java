@@ -43,7 +43,6 @@ public class MenuService {
         Menu savedMenu = menuRepository.save(menu);
         return CreateMenuResponseDto.toDto(savedMenu);
     }
-
     public Page<ReadMenuResponseDto> getPostsPage(int page, Long storeId) {
         Store findStore = storeService.findById(storeId);
         ReadMenuResponseDto findMenu = ReadMenuResponseDto.toDto(
