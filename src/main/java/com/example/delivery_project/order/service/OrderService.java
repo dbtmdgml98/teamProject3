@@ -43,8 +43,8 @@ public class OrderService {
         if (!openTime.isBefore(nowTime) || !closeTime.isAfter(nowTime)) {
             throw new OrderException(ErrorCode.NOT_OPEN_OR_CLOSE_STORE);
         }
-        int findPrice = findMenu.getPrice();
 
+        int findPrice = findMenu.getPrice();
 
         if (findStore.getMinimumOrderPrice() > findPrice) {
             throw new OrderException(ErrorCode.MINIMUM_PRICE_NOT_ENOUGH);
