@@ -46,9 +46,6 @@ public class Store extends TimeBaseEntity {
     @Column(nullable = false)
     private Integer minimumOrderPrice;
 
-    @Column(nullable = false)
-    private Integer countStore;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
