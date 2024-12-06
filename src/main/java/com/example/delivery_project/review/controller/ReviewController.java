@@ -45,4 +45,19 @@ public class ReviewController {
 
         return reviewService.getPostsPage(page,storeId,userId);
     }
+    @GetMapping("/{storeId}/review/starPoint")
+    public Page<ReadReviewResponseDto> findByAllStarPoint(
+            @PathVariable(name = "storeId") Long storeId,
+            @RequestParam(required = false, name = "minStar") Long minStar,
+            @RequestParam(required = false, name = "maxStar") Long maxStart,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+            HttpServletRequest request) {
+
+
+        HttpSession session = request.getSession(false);
+
+        Long userId = (Long) session.getAttribute("userId");
+
+        return reviewService.getStarPointPage(page,storeId,userId,minStar,maxStart);
+    }
 }

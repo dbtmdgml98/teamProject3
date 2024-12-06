@@ -50,5 +50,12 @@ public class ReviewService {
         return reviewRepository.findAllByStoreIdAndUserIdNot(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
     }
 
+    public Page<ReadReviewResponseDto> getStarPointPage(int page, Long storeId,Long userId,Long minStar,Long maxStar) {
+        Store findStore = storeService.findById(storeId);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+
+        return reviewRepository.findAllByStoreIdAndUserIdNotAndStarPointBetween(findStore.getId(),userId,minStar,maxStar,pageable).map(ReadReviewResponseDto::toDto);
+    }
+
 
 }
