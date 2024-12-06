@@ -75,6 +75,5 @@ public class MenuController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
