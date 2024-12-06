@@ -8,6 +8,7 @@ import com.example.delivery_project.user.dto.DeleteUserRequestDto;
 import com.example.delivery_project.user.dto.LoginRequestDto;
 import com.example.delivery_project.user.dto.LoginUserDto;
 import com.example.delivery_project.user.entity.User;
+import com.example.delivery_project.user.entity.UserWithdraw;
 import com.example.delivery_project.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -63,6 +64,10 @@ public class UserService {
 
         if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다");
+        }
+
+        if (findUser.getUserWithdraw().equals(UserWithdraw.WITHDRAWN)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴된 회원입니다.");
         }
 
         return new LoginUserDto(findUser.getId(), findUser.getAuthority());
