@@ -4,6 +4,7 @@ import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.entity.Menu;
 import com.example.delivery_project.order.dto.OrderRequestDto;
 import com.example.delivery_project.order.dto.UpdateOrderRequestDto;
+import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,20 +26,23 @@ public class Order extends TimeBaseEntity {
     private OrderStatus orderStatus;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "menuId")
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
-
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     public Order() {}
 
-    public Order(User user, Menu menu) {
+    public Order(User user, Menu menu, Store store) {
         this.user = user;
         this.menu = menu;
+        this.store = store;
     }
 
     public void updateOrderStatus(UpdateOrderRequestDto orderRequestDto) {

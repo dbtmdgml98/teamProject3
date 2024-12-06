@@ -25,9 +25,15 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/{orderId}/review")
-    public ResponseEntity<ReviewResponseDto> createReview(@PathVariable Long orderId, @RequestBody ReviewRequestDto reviewRequestDto) {
+    public ResponseEntity<ReviewResponseDto> createReview(
+        HttpServletRequest request,
+        @PathVariable Long orderId,
+        @RequestBody ReviewRequestDto reviewRequestDto
+    ) {
 
-        ReviewResponseDto createdReview = reviewService.createReview(orderId, reviewRequestDto);
+        HttpSession session = request.getSession(false);
+        Long userId = (Long) session.getAttribute("userId");
+        ReviewResponseDto createdReview = reviewService.createReview(orderId, userId, reviewRequestDto);
 
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
