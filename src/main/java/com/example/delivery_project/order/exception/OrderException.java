@@ -1,18 +1,20 @@
 package com.example.delivery_project.order.exception;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class OrderException  extends RuntimeException {
 
-   private ErrorCode errorCode;
-   private String errorMessage;
+    private final OrderErrorCode errorCode;
 
-   public OrderException(ErrorCode errorCode) {
-       super(errorCode.getErrorMessage());
-       this.errorCode = errorCode;
-       this.errorMessage = errorCode.getErrorMessage();
+    public OrderException(OrderErrorCode errorCode) {
+        super(errorCode.getErrorMessage());
+        this.errorCode = errorCode;
+    }
+
+   public OrderException(String message, OrderErrorCode orderErrorCode) {
+       super(message);
+       this.errorCode = orderErrorCode;
    }
 }

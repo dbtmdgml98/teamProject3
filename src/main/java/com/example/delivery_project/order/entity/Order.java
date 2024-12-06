@@ -2,7 +2,6 @@ package com.example.delivery_project.order.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.menu.entity.Menu;
-import com.example.delivery_project.order.dto.OrderRequestDto;
 import com.example.delivery_project.order.dto.UpdateOrderRequestDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.user.entity.User;
@@ -37,7 +36,8 @@ public class Order extends TimeBaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(User user, Menu menu, Store store) {
         this.user = user;

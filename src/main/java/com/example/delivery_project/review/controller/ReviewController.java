@@ -33,37 +33,43 @@ public class ReviewController {
 
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("userId");
-        ReviewResponseDto createdReview = reviewService.createReview(orderId, userId, reviewRequestDto);
+
+        ReviewResponseDto createdReview = reviewService.createReview(
+            orderId,
+            userId,
+            reviewRequestDto
+        );
 
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
 
     @GetMapping("/{storeId}/review")
     public Page<ReadReviewResponseDto> findByAll(
-            @PathVariable(name = "storeId") Long storeId,
-            @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-            HttpServletRequest request) {
-
+        @PathVariable(name = "storeId") Long storeId,
+        @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+        HttpServletRequest request
+    ) {
 
         HttpSession session = request.getSession(false);
 
         Long userId = (Long) session.getAttribute("userId");
 
-        return reviewService.getPostsPage(page,storeId,userId);
+        return reviewService.getPostsPage(page, storeId, userId);
     }
+
     @GetMapping("/{storeId}/review/starPoint")
     public Page<ReadReviewResponseDto> findByAllStarPoint(
-            @PathVariable(name = "storeId") Long storeId,
-            @RequestParam(required = false, name = "minStar") Long minStar,
-            @RequestParam(required = false, name = "maxStar") Long maxStart,
-            @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-            HttpServletRequest request) {
-
+        @PathVariable(name = "storeId") Long storeId,
+        @RequestParam(required = false, name = "minStar") Long minStar,
+        @RequestParam(required = false, name = "maxStar") Long maxStart,
+        @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+        HttpServletRequest request
+    ) {
 
         HttpSession session = request.getSession(false);
 
         Long userId = (Long) session.getAttribute("userId");
 
-        return reviewService.getStarPointPage(page,storeId,userId,minStar,maxStart);
+        return reviewService.getStarPointPage(page, storeId, userId, minStar, maxStart);
     }
 }

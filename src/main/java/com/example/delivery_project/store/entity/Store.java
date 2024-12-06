@@ -33,7 +33,7 @@ public class Store extends TimeBaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private StoreStatus storeStatus;
 

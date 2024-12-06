@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum UserWithdraw {
-    ACTIVE(0), // 가입 상태
-    WITHDRAWN(1); // 탈퇴 상태
+    ACTIVE("active"), // 가입 상태
+    WITHDRAWN("withDraw"); // 탈퇴 상태
 
-    private final int value;
+    private final String value;
 
-    UserWithdraw(int value) {
+    UserWithdraw(String value) {
         this.value = value;
     }
 }

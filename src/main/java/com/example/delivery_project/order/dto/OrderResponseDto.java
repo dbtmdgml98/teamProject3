@@ -6,15 +6,15 @@ import lombok.Getter;
 @Getter
 public class OrderResponseDto {
 
-    private Long orderId;
+    private final Long orderId;
 
-    private Long userId;
+    private final Long userId;
 
-    private Long menuId;
+    private final Long menuId;
 
-    private String orderStatus;
+    private final String orderStatus;
 
-    public OrderResponseDto (Order order) {
+    public OrderResponseDto(Order order) {
         this.orderId = order.getId();
         this.userId = order.getUser().getId();
         this.menuId = order.getMenu().getMenuId();

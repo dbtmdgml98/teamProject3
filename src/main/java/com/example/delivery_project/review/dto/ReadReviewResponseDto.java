@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ReadReviewResponseDto {
 
-    private final Long Id;
+    private final Long id;
     private final Long orderId;
     private final Long storeId;
     private final Long userId;
@@ -15,8 +15,9 @@ public class ReadReviewResponseDto {
     private final String content;
     private final LocalDateTime createdAt;
 
-    public ReadReviewResponseDto(Long id, Long orderId, Long storeId, Long userId, Integer starPoint, String content, LocalDateTime createdAt) {
-        Id = id;
+    public ReadReviewResponseDto(Long id, Long orderId, Long storeId, Long userId,
+        Integer starPoint, String content, LocalDateTime createdAt) {
+        this.id = id;
         this.orderId = orderId;
         this.storeId = storeId;
         this.userId = userId;
@@ -27,13 +28,13 @@ public class ReadReviewResponseDto {
 
     public static ReadReviewResponseDto toDto(Review review) {
         return new ReadReviewResponseDto(
-                review.getId(),
-                review.getOrder().getId(),
-                review.getStore().getId(),
-                review.getUser().getId(),
-                review.getStarPoint(),
-                review.getContent(),
-                review.getCreatedAt()
+            review.getId(),
+            review.getOrder().getId(),
+            review.getStore().getId(),
+            review.getUser().getId(),
+            review.getStarPoint(),
+            review.getContent(),
+            review.getCreatedAt()
         );
     }
 }

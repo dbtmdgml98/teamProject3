@@ -30,35 +30,49 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final StoreService storeService;
 
-    public ReviewResponseDto createReview(Long orderId, Long userId, ReviewRequestDto reviewRequestDto) {
+    public ReviewResponseDto createReview(
+        Long orderId, Long userId,
+        ReviewRequestDto reviewRequestDto
+    ) {
 
         Order findOrder = orderRepository.findByIdOrElseThrow(orderId);
         User findUser = userRepository.findByIdOrElseThrow(userId);
         Store findStore = findOrder.getStore();
+
         // 배달 완료 되지 않은 주문일 경우
         if (!findOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "배달 완료 되지 않은 주문은 리뷰를 작성할 수 없습니다.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "배달 완료 되지 않은 주문은 리뷰를 작성할 수 없습니다.");
         }
-        Review review = new Review(findOrder, findUser, findStore, reviewRequestDto.getStarPoint(), reviewRequestDto.getContent());
+
+        Review review = new Review(findOrder, findUser, findStore, reviewRequestDto.getStarPoint(),
+            reviewRequestDto.getContent());
 
         Review savedReview = reviewRepository.save(review);
 
-        return new ReviewResponseDto(savedReview.getId(), savedReview.getOrder().getId(), savedReview.getContent(), savedReview.getStarPoint(), savedReview.getCreatedAt(), savedReview.getModifiedAt());
+        return new ReviewResponseDto(savedReview.getId(), savedReview.getOrder().getId(),
+            savedReview.getContent(), savedReview.getStarPoint(), savedReview.getCreatedAt(),
+            savedReview.getModifiedAt());
     }
 
-    public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId,Long userId) {
+    public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId, Long userId) {
         Store findStore = storeService.findById(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
-        return reviewRepository.findAllByStoreIdAndUserIdNot(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
+        return reviewRepository.findAllByStoreIdAndUserIdNot(
+            findStore.getId(), userId, pageable
+            ).map(ReadReviewResponseDto::toDto);
     }
 
-    public Page<ReadReviewResponseDto> getStarPointPage(int page, Long storeId,Long userId,Long minStar,Long maxStar) {
+    public Page<ReadReviewResponseDto> getStarPointPage(int page, Long storeId, Long userId,
+        Long minStar, Long maxStar) {
         Store findStore = storeService.findById(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
-        return reviewRepository.findAllByStoreIdAndUserIdNotAndStarPointBetween(findStore.getId(),userId,minStar,maxStar,pageable).map(ReadReviewResponseDto::toDto);
+        return reviewRepository.findAllByStoreIdAndUserIdNotAndStarPointBetween(
+            findStore.getId(),
+            userId, minStar, maxStar, pageable
+        ).map(ReadReviewResponseDto::toDto);
     }
-
 
 }
