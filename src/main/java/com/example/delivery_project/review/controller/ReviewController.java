@@ -57,7 +57,7 @@ public class ReviewController {
         return reviewService.getPostsPage(page, storeId, userId);
     }
 
-    @GetMapping("/{storeId}/review/starPoint")
+    @GetMapping("/{storeId}/review/point")
     public Page<ReadReviewResponseDto> findByAllStarPoint(
         @PathVariable(name = "storeId") Long storeId,
         @RequestParam(required = false, name = "minStar") Long minStar,
