@@ -9,6 +9,7 @@ import com.example.delivery_project.review.entity.Review;
 import com.example.delivery_project.review.dto.ReadReviewResponseDto;
 import com.example.delivery_project.review.repository.ReviewRepository;
 import com.example.delivery_project.store.entity.Store;
+import com.example.delivery_project.store.repository.StoreRepository;
 import com.example.delivery_project.store.service.StoreService;
 import com.example.delivery_project.user.entity.User;
 import com.example.delivery_project.user.repository.UserRepository;
@@ -28,7 +29,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final StoreService storeService;
+    private final StoreRepository storeRepository;
 
     public ReviewResponseDto createReview(
         Long orderId, Long userId,
@@ -37,7 +38,7 @@ public class ReviewService {
 
         Order findOrder = orderRepository.findByIdOrElseThrow(orderId);
         User findUser = userRepository.findByIdOrElseThrow(userId);
-        Store findStore = findOrder.getStore();
+        Store findStore = findOrder.getMenu().getStore();
 
         // 배달 완료 되지 않은 주문일 경우
         if (!findOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
@@ -56,7 +57,7 @@ public class ReviewService {
     }
 
     public Page<ReadReviewResponseDto> getPostsPage(int page, Long storeId, Long userId) {
-        Store findStore = storeService.findById(storeId);
+        Store findStore = storeRepository.findByIdOrElseThrow(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
         return reviewRepository.findAllByStoreIdAndUserIdNot(
@@ -66,7 +67,7 @@ public class ReviewService {
 
     public Page<ReadReviewResponseDto> getStarPointPage(int page, Long storeId, Long userId,
         Long minStar, Long maxStar) {
-        Store findStore = storeService.findById(storeId);
+        Store findStore = storeRepository.findByIdOrElseThrow(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
         return reviewRepository.findAllByStoreIdAndUserIdNotAndStarPointBetween(

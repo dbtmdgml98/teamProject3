@@ -17,7 +17,7 @@ public class OrderResponseDto {
     public OrderResponseDto(Order order) {
         this.orderId = order.getId();
         this.userId = order.getUser().getId();
-        this.menuId = order.getMenu().getMenuId();
+        this.menuId = order.getMenu().getId();
         this.orderStatus = order.getOrderStatus().toString();
     }
 }

@@ -11,7 +11,7 @@ public class Menu extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long menuId;
+    private Long Id;
 
     @Column(nullable = false)
     private String name;
