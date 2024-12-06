@@ -61,9 +61,7 @@ public class MenuController {
             menuId);
 
         return new ResponseEntity<>(updateMenu, HttpStatus.CREATED);
-
     }
-
     //메뉴 삭제
     @PutMapping("/owners/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<Void> delete(
