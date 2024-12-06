@@ -50,7 +50,7 @@ public class OrderService {
             throw new OrderException(ErrorCode.MINIMUM_PRICE_NOT_ENOUGH);
         }
 
-        Order order = new Order(findUser,findMenu);
+        Order order = new Order(findUser, findMenu, findStore);
         order.setOrderStatus(OrderStatus.ORDER_FINISHED);
 
         orderRepository.save(order);
