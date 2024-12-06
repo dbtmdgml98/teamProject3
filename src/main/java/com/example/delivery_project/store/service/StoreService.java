@@ -100,9 +100,15 @@ public class StoreService {
         }
     }
 
-    public StoreResponseDto updateStore(Long id, StoreRequestDto storeRequestDto) {
+    public StoreResponseDto updateStore(Long userId, Long storeId, StoreRequestDto storeRequestDto) {
 
-        Store findStore = findById(id);
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+        Store findStore = findById(storeId);
+
+        // 다른 사장님이 수정하는 경우
+        if (!findUser.getId().equals(findStore.getUser().getId())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "가게 사장님만 수정할 수 있습니다.");
+        }
 
         findStore.updateStore(storeRequestDto);
         Store savedStore = storeRepository.save(findStore);

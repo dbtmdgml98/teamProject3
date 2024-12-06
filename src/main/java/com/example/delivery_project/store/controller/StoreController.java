@@ -86,10 +86,14 @@ public class StoreController {
     @PatchMapping("/owners/stores/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
         @PathVariable(name = "storeId") Long storeId,
-        @RequestBody StoreRequestDto storeRequestDto
+        @RequestBody StoreRequestDto storeRequestDto,
+        HttpServletRequest request
     ) {
 
-        StoreResponseDto updatedStore = storeService.updateStore(storeId, storeRequestDto);
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+
+        StoreResponseDto updatedStore = storeService.updateStore(userId, storeId, storeRequestDto);
 
         return new ResponseEntity<>(updatedStore, HttpStatus.OK);
     }
