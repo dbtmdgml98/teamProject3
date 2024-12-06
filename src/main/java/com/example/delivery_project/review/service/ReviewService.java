@@ -37,7 +37,7 @@ public class ReviewService {
 
         Order findOrder = orderRepository.findByIdOrElseThrow(orderId);
         User findUser = userRepository.findByIdOrElseThrow(userId);
-        Store findStore = findOrder.getStore();
+        Store findStore = findOrder.getMenu().getStore();
 
         // 배달 완료 되지 않은 주문일 경우
         if (!findOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
