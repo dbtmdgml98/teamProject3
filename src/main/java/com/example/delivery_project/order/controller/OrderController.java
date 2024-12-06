@@ -34,9 +34,12 @@ public class OrderController {
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(
         @PathVariable(name = "orderId") Long orderId,
-        @RequestBody UpdateOrderRequestDto updateorderRequestDto
+        @RequestBody UpdateOrderRequestDto updateorderRequestDto,
+        HttpServletRequest request
     ) {
-        OrderResponseDto updateOrder = orderService.updateOrder(orderId, updateorderRequestDto);
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+        OrderResponseDto updateOrder = orderService.updateOrder(orderId, updateorderRequestDto, userId);
 
         return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
