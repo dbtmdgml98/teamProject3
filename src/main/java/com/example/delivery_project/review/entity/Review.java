@@ -50,8 +50,10 @@ public class Review extends TimeBaseEntity {
         this.content = content;
     }
 
-    public Review(Order order, Integer starPoint, String content) {
+    public Review(Order order, User user, Store store, Integer starPoint, String content) {
         this.order = order;
+        this.user = user;
+        this.store = store;
         this.starPoint = starPoint;
         this.content = content;
     }
