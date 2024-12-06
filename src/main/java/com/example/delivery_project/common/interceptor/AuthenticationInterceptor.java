@@ -27,7 +27,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (session.getAttribute("userId") == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
         }
-        
+
         return true;
     }
 }

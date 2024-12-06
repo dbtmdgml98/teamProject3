@@ -20,13 +20,4 @@ public class UpdateMenuStatusRequestDto {
         this.price = price;
         this.menuDelete = menuDelete;
     }
-
-    public Menu toEntity(Store findStore){
-        return new Menu(
-                this.name,
-                this.price,
-                this.menuDelete,
-                findStore
-        );
-    }
 }

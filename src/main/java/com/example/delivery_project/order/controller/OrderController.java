@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class OrderController {
+
     private final OrderService orderService;
 
     @PostMapping("/orders")
-    public ResponseEntity<OrderResponseDto> userOrder(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request) {
+    public ResponseEntity<OrderResponseDto> userOrder(
+        @RequestBody OrderRequestDto orderRequestDto,
+        HttpServletRequest request
+    ) {
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute("userId");
         OrderResponseDto orderFinished = orderService.orderFinished(orderRequestDto, userId);
@@ -28,8 +32,9 @@ public class OrderController {
 
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(
-            @PathVariable(name = "orderId") Long orderId,
-            @RequestBody UpdateOrderRequestDto updateorderRequestDto) {
+        @PathVariable(name = "orderId") Long orderId,
+        @RequestBody UpdateOrderRequestDto updateorderRequestDto
+    ) {
         OrderResponseDto updateOrder = orderService.updateOrder(orderId, updateorderRequestDto);
 
         return new ResponseEntity<>(updateOrder, HttpStatus.OK);

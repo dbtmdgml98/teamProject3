@@ -4,8 +4,6 @@ import com.example.delivery_project.menu.entity.MenuDelete;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
-import java.time.LocalTime;
-
 @Getter
 public class MenuRequestDto {
 

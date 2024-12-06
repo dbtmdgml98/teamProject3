@@ -14,7 +14,8 @@ public class ReviewResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public ReviewResponseDto(Long reviewId, Long orderId, String content, Integer starPoint, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ReviewResponseDto(Long reviewId, Long orderId, String content, Integer starPoint,
+        LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.reviewId = reviewId;
         this.orderId = orderId;
         this.content = content;

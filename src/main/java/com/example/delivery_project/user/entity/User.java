@@ -27,10 +27,10 @@ public class User extends TimeBaseEntity {
 
     private String password;
 
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private Authority authority;
 
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private UserWithdraw userWithdraw = UserWithdraw.ACTIVE;
 
     public User() {

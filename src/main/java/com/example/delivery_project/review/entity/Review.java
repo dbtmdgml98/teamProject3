@@ -2,8 +2,6 @@ package com.example.delivery_project.review.entity;
 
 import com.example.delivery_project.common.entity.TimeBaseEntity;
 import com.example.delivery_project.order.entity.Order;
-import com.example.delivery_project.review.dto.ReadReviewResponseDto;
-import com.example.delivery_project.review.dto.ReviewResponseDto;
 import com.example.delivery_project.store.entity.Store;
 import com.example.delivery_project.user.entity.User;
 import jakarta.persistence.*;
@@ -40,16 +38,6 @@ public class Review extends TimeBaseEntity {
 
     }
 
-
-    public Review(Long id, Order order, Store store, User user, Integer starPoint, String content) {
-        Id = id;
-        this.order = order;
-        this.store = store;
-        this.user = user;
-        this.starPoint = starPoint;
-        this.content = content;
-    }
-
     public Review(Order order, User user, Store store, Integer starPoint, String content) {
         this.order = order;
         this.user = user;
@@ -57,6 +45,5 @@ public class Review extends TimeBaseEntity {
         this.starPoint = starPoint;
         this.content = content;
     }
-
 
 }

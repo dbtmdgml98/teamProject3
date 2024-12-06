@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum Authority {
-    USER(0), // 일반 유저
-    OWNER(1); // 사장
+    USER("user"), // 일반 유저
+    OWNER("owner"); // 사장
 
-    private final int value;
+    private final String authority;
 
-    Authority(int value) {
-        this.value = value;
+    Authority(String authority) {
+        this.authority = authority;
     }
 }
