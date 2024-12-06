@@ -38,15 +38,16 @@ public class MenuService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "해당 가게 주인이 아닙니다.");
         }
 
-        Menu savedMenu = menuRepository.save(requestDto.toEntity(findStore));
 
+        Menu menu = new Menu(requestDto.getName(), requestDto.getPrice(),findStore);
+        Menu savedMenu = menuRepository.save(menu);
         return CreateMenuResponseDto.toDto(savedMenu);
     }
 
     public Page<ReadMenuResponseDto> getPostsPage(int page, Long storeId) {
         Store findStore = storeService.findById(storeId);
         ReadMenuResponseDto findMenu = ReadMenuResponseDto.toDto(
-            menuRepository.findMenuByMenuId(findStore.getId()));
+            menuRepository.findMenuById(findStore.getId()));
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 

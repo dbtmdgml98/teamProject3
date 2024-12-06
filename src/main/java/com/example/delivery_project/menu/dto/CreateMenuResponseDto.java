@@ -6,18 +6,19 @@ import lombok.Getter;
 
 @Getter
 public class CreateMenuResponseDto {
-
+    private Long Id;
     private Long storeId;
-    private Long menuId;
+
     private String name;
     private int price;
     private MenuDelete menuDelete;
 
 
-    public CreateMenuResponseDto(Long storeId, Long menuId, String name, int price,
+    public CreateMenuResponseDto(Long Id, Long storeId, String name, int price,
         MenuDelete menuDelete) {
+        this.Id = Id;
         this.storeId = storeId;
-        this.menuId = menuId;
+
         this.name = name;
         this.price = price;
         this.menuDelete = menuDelete;
@@ -25,11 +26,11 @@ public class CreateMenuResponseDto {
 
     public static CreateMenuResponseDto toDto(Menu menu) {
         return new CreateMenuResponseDto(
-            menu.getStore().getId(),
-            menu.getMenuId(),
-            menu.getName(),
-            menu.getPrice(),
-            menu.getMenuDelete()
+                menu.getId(),
+                menu.getStore().getId(),
+                menu.getName(),
+                menu.getPrice(),
+                menu.getMenuDelete()
         );
     }
 

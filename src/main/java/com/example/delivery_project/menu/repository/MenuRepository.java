@@ -16,7 +16,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 
     Page<Menu> findAllByStoreIdAndMenuDelete(Long id, MenuDelete menuDelete, Pageable pageable);
 
-    Menu findMenuByMenuId(Long id);
+    Menu findMenuById(Long id);
 
     default Menu findByIdOrElseThrow(Long userId) {
         return findById(userId).orElseThrow(
