@@ -12,6 +12,7 @@ import com.example.delivery_project.order.exception.OrderErrorCode;
 import com.example.delivery_project.order.exception.OrderException;
 import com.example.delivery_project.order.repository.OrderRepository;
 import com.example.delivery_project.store.entity.Store;
+import com.example.delivery_project.user.entity.Authority;
 import com.example.delivery_project.user.entity.User;
 import com.example.delivery_project.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,12 @@ public class OrderService {
     public OrderResponseDto orderFinished(OrderRequestDto orderRequestDto, Long userId) {
 
         User findUser = userRepository.findByIdOrElseThrow(userId);
+        Authority findAuthority = findUser.getAuthority();
+
+        if (!findAuthority.equals(Authority.USER)) {
+            throw new OrderException(OrderErrorCode.ORDER_ONLY_USER);
+        }
+
         Menu findMenu = menuRepository.findByIdOrElseThrow(orderRequestDto.getMenuId());
         Store findStore = findMenu.getStore();
         LocalTime nowTime = LocalTime.now();
