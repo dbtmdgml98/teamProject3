@@ -65,7 +65,7 @@ public class MenuController {
     }
 
     //메뉴 삭제
-    @DeleteMapping("/owners/stores/{storeId}/menus/{menuId}")
+    @PutMapping("/owners/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<Void> delete(
         @PathVariable Long storeId,
         @PathVariable Long menuId,
