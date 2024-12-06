@@ -39,7 +39,6 @@ public class ReviewService {
         if (!findOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "배달 완료 되지 않은 주문은 리뷰를 작성할 수 없습니다.");
         }
-
         Review review = new Review(findOrder, findUser, findStore, reviewRequestDto.getStarPoint(), reviewRequestDto.getContent());
 
         Review savedReview = reviewRepository.save(review);
