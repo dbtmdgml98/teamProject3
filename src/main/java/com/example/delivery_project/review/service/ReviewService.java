@@ -39,7 +39,6 @@ public class ReviewService {
         if (!findOrder.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "배달 완료 되지 않은 주문은 리뷰를 작성할 수 없습니다.");
         }
-
         Review review = new Review(findOrder, findUser, findStore, reviewRequestDto.getStarPoint(), reviewRequestDto.getContent());
 
         Review savedReview = reviewRepository.save(review);
@@ -52,6 +51,13 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
         return reviewRepository.findAllByStoreIdAndUserIdNot(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
+    }
+
+    public Page<ReadReviewResponseDto> getStarPointPage(int page, Long storeId,Long userId,Long minStar,Long maxStar) {
+        Store findStore = storeService.findById(storeId);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+
+        return reviewRepository.findAllByStoreIdAndUserIdNotAndStarPointBetween(findStore.getId(),userId,minStar,maxStar,pageable).map(ReadReviewResponseDto::toDto);
     }
 
 
