@@ -47,7 +47,7 @@ public class ReviewService {
         Store findStore = storeService.findById(storeId);
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 
-        return reviewRepository.findAllByStoreId(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
+        return reviewRepository.findAllByStoreIdAndUserIdNot(findStore.getId(),userId,pageable).map(ReadReviewResponseDto::toDto);
     }
 
 
