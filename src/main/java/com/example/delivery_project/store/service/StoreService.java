@@ -73,31 +73,15 @@ public class StoreService {
     public Page<ReadAllStoreResponseDto> findAllStore(Pageable pageable, String storeName,
         Authority authority) {
 
-        // 고객인 경우 -> 페이지네이션에서 폐업된 가게 제외, 사장인 경우 -> 모두 조회 가능
-        Page<Store> storesPages;
-        Page<Store> allByName;
+        StoreStatus storeStatus = null;
+
+        // 고객이면 폐업 가게 제외
         if (!authority.equals(Authority.OWNER)) {
-
-            // storeName이 없으면 페이지 전체 조회, 있으면 검색
-            if (storeName == null) {
-                storesPages = storeRepository.findAllByStoreStatus(pageable, StoreStatus.OPEN);
-                return storesPages.map(ReadAllStoreResponseDto::toDto);
-            } else {
-                allByName = storeRepository.findAllByStoreStatusAndNameIsContaining(pageable,
-                    StoreStatus.OPEN, storeName);
-                return allByName.map(ReadAllStoreResponseDto::toDto);
-            }
-        } else {
-
-            // storeName이 없으면 페이지 전체 조회, 있으면 검색
-            if (storeName == null) {
-                storesPages = storeRepository.findAll(pageable);
-                return storesPages.map(ReadAllStoreResponseDto::toDto);
-            } else {
-                allByName = storeRepository.findAllByNameIsContaining(pageable, storeName);
-                return allByName.map(ReadAllStoreResponseDto::toDto);
-            }
+            storeStatus = StoreStatus.OPEN;
         }
+
+        Page<Store> result = storeRepository.searchStores(pageable, storeName, storeStatus);
+        return result.map(ReadAllStoreResponseDto::toDto);
     }
 
     public StoreResponseDto updateStore(Long userId, Long storeId, StoreRequestDto storeRequestDto) {
