@@ -7,11 +7,9 @@ import com.example.delivery_project.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
@@ -20,12 +18,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Long countByUserAndStoreStatus(User user, StoreStatus storeStatus);
 
-    @Query("""
-            SELECT s FROM Store s
-            WHERE (:storeName IS NULL OR :storeName = '' OR s.name LIKE %:storeName% )
-            AND (:storeStatus IS NULL OR s.storeStatus = :storeStatus)
-            """)
-    Page<Store> findStores(Pageable pageable, @Param("storeName") String storeName, @Param("storeStatus") StoreStatus storeStatus);
+    Page<Store> findAllByStoreStatus(Pageable pageable, StoreStatus storeStatus);
+
+    Page<Store> findAllByNameIsContaining(Pageable pageable, String storeName);
+
+    Page<Store> findAllByStoreStatusAndNameIsContaining(Pageable pageable, StoreStatus storeStatus, String storeName);
 
     Store findStoreById(Long id);
 
